@@ -13,7 +13,7 @@ interface IReturnedData {
     '200': number | undefined;
     '400': number | undefined;
     '800': number | undefined;
-    '500': number | undefined;
+    '1500': number | undefined;
     '5000': number | undefined;
   };
 }
@@ -38,7 +38,7 @@ enum distance {
   '200m',
   '400m',
   '800m',
-  '500m',
+  '1500m',
   '5000m',
 }
 

@@ -12,8 +12,8 @@ export default function Page() {
   const tickLabelOffset = 15;
 
   const accessors = {
-    xAccessor: (d: IDataPoint) => d.x,
-    yAccessor: (d: IDataPoint) => d.y,
+    xAccessor: (d: IDataPoint) => (d ? d.x : null),
+    yAccessor: (d: IDataPoint) => (d ? d.y : null),
   };
 
   const distances: number[] = [0, 50, 100, 200, 400, 800, 1500, 5000];
@@ -21,14 +21,12 @@ export default function Page() {
   return (
     <div>
       <XYChart
-        height={270}
+        height={300}
         margin={{ left: 60, top: 35, bottom: 38, right: 27 }}
         xScale={{ type: 'linear' }}
-        yScale={{ type: 'linear', zero: false, domain: [1, 2.5] }}
+        yScale={{ type: 'linear', zero: false, domain: [1.2, 2.5] }}
       >
         <AnimatedGrid
-          columns={true}
-          numTicks={distances.length}
           lineStyle={{
             stroke: '#000000',
             strokeLinecap: 'round',
@@ -39,36 +37,33 @@ export default function Page() {
         <AnimatedAxis
           tickValues={distances}
           hideAxisLine
-          rangePadding={{ start: 0, end: 3 }}
           orientation="bottom"
-          tickLabelProps={(value, index) => ({ dy: tickLabelOffset })}
-          numTicks={8}
+          tickLabelProps={() => ({ dy: tickLabelOffset })}
         />
         <AnimatedAxis hideAxisLine orientation="left" numTicks={4} tickLabelProps={() => ({ dx: -10 })} />
-        <AnimatedLineSeries stroke="#ef4444" dataKey="regressionLine" data={regressionLine} {...accessors} />
+        <AnimatedLineSeries
+          enableEvents={false}
+          stroke="#ef4444"
+          dataKey="regressionLine"
+          data={regressionLine}
+          {...accessors}
+        />
         <GlyphSeries colorAccessor={() => '#3b82f6'} data={dataPoints} dataKey="dataPoint" {...accessors} />
         <Tooltip
           snapTooltipToDatumX
           snapTooltipToDatumY
           showSeriesGlyphs
           glyphStyle={{
-            fill: '#008561',
+            fill: '#111111',
             strokeWidth: 0,
           }}
-          renderTooltip={({ tooltipData }) => {
+          renderTooltip={({ tooltipData, colorScale }) => {
             return (
-              <div>
-                {Object.entries(tooltipData.datumByKey).map((lineDataArray) => {
-                  const [key, value] = lineDataArray;
-                  console.log('🚀 ~ file: page.tsx:63 ~ {Object.entries ~ value:', value);
-
-                  return (
-                    <div className="row" key={key}>
-                      <div className="date">{accessors.xAccessor(value.datum as IDataPoint)}</div>
-                      <div className="value">{accessors.yAccessor(value.datum as IDataPoint)}</div>
-                    </div>
-                  );
-                })}
+              <div className="z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2">
+                <div style={{ color: colorScale('dataPoint') }}>{tooltipData?.datumByKey['dataPoint'].key}</div>
+                {accessors.xAccessor(tooltipData?.datumByKey['dataPoint'].datum)}
+                {', '}
+                {accessors.yAccessor(tooltipData?.datumByKey['dataPoint'].datum)}
               </div>
             );
           }}
