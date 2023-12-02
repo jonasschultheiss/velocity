@@ -11,7 +11,7 @@ export interface IMobileSheetProperties extends React.HTMLAttributes<HTMLDivElem
 export function MobileSheet(properties: Readonly<IMobileSheetProperties>): React.ReactNode {
   const { className, navigationRoutes } = properties;
   return (
-    <SheetContent className="flex flex-col  justify-end" side={'left'}>
+    <SheetContent className="flex-col items-start align-start" side={'left'}>
       <a href="#" className="-m-1.5 p-1.5">
         <span className="sr-only">Your Company</span>
         <Image priority className="h-8 w-auto" src={logo} alt="Velocity logo" />
