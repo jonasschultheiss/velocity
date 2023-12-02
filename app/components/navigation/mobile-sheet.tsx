@@ -11,13 +11,11 @@ export interface IMobileSheetProperties extends React.HTMLAttributes<HTMLDivElem
 export function MobileSheet(properties: Readonly<IMobileSheetProperties>): React.ReactNode {
   const { className, navigationRoutes } = properties;
   return (
-    <SheetContent side={'left'}>
-      <div className="flex items-center justify-between">
-        <a href="#" className="-m-1.5 p-1.5">
-          <span className="sr-only">Your Company</span>
-          <Image priority className="h-8 w-auto" src={logo} alt="Velocity logo" />
-        </a>
-      </div>
+    <SheetContent className="flex flex-col  justify-end" side={'left'}>
+      <a href="#" className="-m-1.5 p-1.5">
+        <span className="sr-only">Your Company</span>
+        <Image priority className="h-8 w-auto" src={logo} alt="Velocity logo" />
+      </a>
       <NavigaionItems.Mobile navigationRoutes={navigationRoutes} />
     </SheetContent>
   );
