@@ -20,7 +20,7 @@ function NavigationItemsMobile(properties: Readonly<INavigaitonItemsProperties>)
         <a
           key={route.name}
           href={route.href}
-          className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-muted hover:text-foreground duration-100 ease-in-out"
+          className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-muted-foreground hover:text-foreground duration-100 ease-in-out"
         >
           {route.name}
         </a>
@@ -39,7 +39,7 @@ function NavigationItemsDesktop(properties: Readonly<INavigaitonItemsProperties>
           href={route.href}
           className="text-sm font-semibold leading-6 text-foreground/50 focus:text-foreground px-2 py-1 focus:ring focus:outline-none hover:text-foreground duration-100 ease-in-out"
         >
-          <Typography variant="h4" component="span">
+          <Typography variant="large" component="span">
             {route.name}
           </Typography>
         </Link>

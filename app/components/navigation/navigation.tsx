@@ -23,7 +23,7 @@ export function Navigation() {
               <span className="sr-only">Your Company</span>
               <Image priority className="h-8 w-auto text-fill text-foreground" src={logo} alt="Velocity logo" />
             </a>
-            <Typography variant="h2" component="span" className="hidden lg:block">
+            <Typography variant="large" component="span" className="hidden lg:block">
               velocity
             </Typography>
           </div>
