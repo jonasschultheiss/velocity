@@ -20,12 +20,12 @@ export default function Page() {
   const distances: number[] = [0, 50, 100, 200, 400, 800, 1500, 5000];
 
   return (
-    <main className="flex h-screen flex-col items-center justify-center gap-2">
+    <main className="flex flex-col items-center justify-center h-screen gap-2">
       <SmileIcon className="w-16 h-16 text-muted-foreground" />
       <Typography variant="h1" component="span">
         In development
       </Typography>
-      {/* <ScrollArea className="m-4 whitespace-nowrap rounded-md border">
+      {/* <ScrollArea className="m-4 border rounded-md whitespace-nowrap">
         <ScrollBar orientation="horizontal" />
         <AspectRatio ratio={16 / 9}>
           <XYChart

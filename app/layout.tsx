@@ -1,8 +1,10 @@
+import { Analytics } from '@vercel/analytics/react';
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
 import { Navigation } from './components/navigation/navigation';
 import { ThemeProvider } from './components/theme-provider';
+
 import './ui/globals.css';
 
 export const metadata: Metadata = {
@@ -17,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <Navigation />
           {children}
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
