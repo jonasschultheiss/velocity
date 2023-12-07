@@ -1,7 +1,15 @@
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import React from 'react';
+import { ModeToggle } from '../theme-provider/theme-toggle';
 import { Typography } from '../typography';
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from '../ui/navigation-menu';
 
 export interface INavigationRoute {
   name: string;
@@ -17,29 +25,10 @@ function NavigationItemsMobile(properties: Readonly<INavigaitonItemsProperties>)
   return (
     <div className={cn('mt-6 space-y-2', className)}>
       {navigationRoutes.map((route) => (
-        <a
-          key={route.name}
-          href={route.href}
-          className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-muted-foreground hover:text-foreground duration-100 ease-in-out"
-        >
-          <Typography variant="large" component="span">
-            {route.name}
-          </Typography>
-        </a>
-      ))}
-    </div>
-  );
-}
-
-function NavigationItemsDesktop(properties: Readonly<INavigaitonItemsProperties>): React.ReactNode {
-  const { navigationRoutes, className } = properties;
-  return (
-    <div className={cn('hidden lg:flex lg:gap-x-2', className)}>
-      {navigationRoutes.map((route) => (
         <Link
           key={route.name}
           href={route.href}
-          className="text-sm font-semibold leading-6 text-muted-foreground focus:text-foreground px-2 py-1 focus:ring focus:outline-none hover:text-foreground duration-100 ease-in-out"
+          className="block px-3 py-2 -mx-3 text-base font-semibold leading-7 duration-100 ease-in-out rounded-lg text-muted-foreground hover:text-foreground"
         >
           <Typography variant="large" component="span">
             {route.name}
@@ -50,4 +39,22 @@ function NavigationItemsDesktop(properties: Readonly<INavigaitonItemsProperties>
   );
 }
 
-export const NavigaionItems = { Mobile: NavigationItemsMobile, Desktop: NavigationItemsDesktop };
+function NavigationItemsDesktop(properties: Readonly<INavigaitonItemsProperties>): React.ReactNode {
+  const { navigationRoutes, className } = properties;
+  return (
+    <NavigationMenu className={cn('hidden lg:flex lg:gap-x-2', className)}>
+      <NavigationMenuList>
+        {navigationRoutes.map((route) => (
+          <NavigationMenuItem key={route.name}>
+            <Link href={route.href} legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>{route.name}</NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+        ))}
+        <ModeToggle />
+      </NavigationMenuList>
+    </NavigationMenu>
+  );
+}
+
+export const NavigationItems = { Mobile: NavigationItemsMobile, Desktop: NavigationItemsDesktop };
