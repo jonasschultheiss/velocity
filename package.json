@@ -17,6 +17,9 @@
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
     "@react-spring/web": "^9.7.3",
+    "@t3-oss/env-nextjs": "^0.7.1",
+    "@typescript-eslint/eslint-plugin": "^6.13.2",
+    "@typescript-eslint/parser": "^6.13.2",
     "@vercel/analytics": "^1.1.1",
     "@vercel/postgres": "^0.5.1",
     "@visx/curve": "^3.3.0",
@@ -33,6 +36,7 @@
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "drizzle-orm": "^0.29.1",
+    "eslint-plugin-drizzle": "^0.2.2",
     "geist": "^1.2.0",
     "lucide-react": "^0.294.0",
     "next": "14.0.3",
@@ -40,7 +44,8 @@
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.0.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20",

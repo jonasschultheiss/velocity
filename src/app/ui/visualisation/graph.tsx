@@ -1,9 +1,9 @@
 'use client';
 
-import { IDataPoint } from '@/data/interfaces';
-import { useDataPoints } from '@/data/useDataPoints';
-import { useRegressionLine } from '@/data/useRegressionLine';
 import { AnimatedAxis, AnimatedGrid, AnimatedLineSeries, GlyphSeries, Tooltip, XYChart } from '@visx/xychart';
+import { IDataPoint } from '../../data/interfaces';
+import { useDataPoints } from '../../data/useDataPoints';
+import { useRegressionLine } from '../../data/useRegressionLine';
 
 export default function Graph() {
   const { regressionLine } = useRegressionLine();

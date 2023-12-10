@@ -9,14 +9,14 @@ import { MobileSheet } from './mobile-sheet';
 import { INavigationRoute, NavigationItems } from './navigation-items';
 
 const navigation: INavigationRoute[] = [
-  { name: 'Swimmer', href: '#' },
+  { name: 'Swimmers', href: '/swimmers' },
   { name: 'Comparison', href: '#' },
   { name: 'About', href: '#' },
 ];
 
 export function Navigation() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-8">
       <Sheet>
         <nav className="flex items-center justify-between px-6 py-4 mx-auto" aria-label="Global">
           <Link href="/" className="-m-1.5 p-1.5 flex flex-row items-center gap-x-4">

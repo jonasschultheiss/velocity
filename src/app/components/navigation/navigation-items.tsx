@@ -1,6 +1,8 @@
-import { cn } from '@/lib/utils';
 import Link from 'next/link';
+// import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import React from 'react';
+import { cn } from '../../lib/utils';
 import { ModeToggle } from '../theme-provider/theme-toggle';
 import { Typography } from '../typography';
 import {
@@ -41,13 +43,17 @@ function NavigationItemsMobile(properties: Readonly<INavigaitonItemsProperties>)
 
 function NavigationItemsDesktop(properties: Readonly<INavigaitonItemsProperties>): React.ReactNode {
   const { navigationRoutes, className } = properties;
+  const currentPath = usePathname();
+
   return (
     <NavigationMenu className={cn('hidden lg:flex lg:gap-x-2', className)}>
       <NavigationMenuList>
         {navigationRoutes.map((route) => (
           <NavigationMenuItem key={route.name}>
             <Link href={route.href} legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>{route.name}</NavigationMenuLink>
+              <NavigationMenuLink active={currentPath === route.href} className={navigationMenuTriggerStyle()}>
+                {route.name}
+              </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
         ))}
