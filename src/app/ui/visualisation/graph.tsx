@@ -20,7 +20,7 @@ export default function Graph() {
 
   return (
     <div>
-      <XYChart
+      {/* <XYChart
         height={300}
         margin={{ left: 60, top: 35, bottom: 38, right: 27 }}
         xScale={{ type: 'linear' }}
@@ -70,7 +70,7 @@ export default function Graph() {
             );
           }}
         />
-      </XYChart>
+      </XYChart> */}
     </div>
   );
 }
