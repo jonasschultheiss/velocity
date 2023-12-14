@@ -25,6 +25,7 @@
     "@typescript-eslint/parser": "^6.13.2",
     "@vercel/analytics": "^1.1.1",
     "@vercel/postgres": "^0.5.1",
+    "@vercel/speed-insights": "^1.0.2",
     "@visx/curve": "^3.3.0",
     "@visx/gradient": "^3.3.0",
     "@visx/group": "^3.3.0",
