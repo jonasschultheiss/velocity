@@ -1,5 +1,6 @@
 import { Typography } from '@/components/typography';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import Graph from '@/components/visualisation/graph';
 import { eq } from 'drizzle-orm';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -35,6 +36,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <Typography variant="p" component="p">
           {bio}
         </Typography>
+        <Graph />
       </div>
     </main>
   );

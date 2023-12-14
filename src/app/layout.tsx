@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 import { Navigation } from './components/navigation/navigation';
 import { ThemeProvider } from './components/theme-provider';
 
-import './ui/globals.css';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Create Next App',

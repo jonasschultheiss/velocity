@@ -6,9 +6,9 @@ export const psqlTable = pgTableCreator((name) => `${env.DRIZZLE_TABLE_PREAMBLE}
 
 export const swimmers = pgTable('swimmers', {
   id: serial('id').primaryKey(),
-  surname: varchar('surname', { length: 256 }),
-  lastname: varchar('lastname', { length: 256 }),
-  club: varchar('club', { length: 256 }),
+  surname: varchar('surname', { length: 256 }).notNull(),
+  lastname: varchar('lastname', { length: 256 }).notNull(),
+  club: varchar('club', { length: 256 }).notNull(),
   weight: smallint('weight').notNull(),
   height: smallint('height').notNull(),
   birthdate: timestamp('birthdate', { precision: 6, withTimezone: false }).notNull(),
