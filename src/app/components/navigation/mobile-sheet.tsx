@@ -7,10 +7,11 @@ import { INavigationRoute, NavigationItems } from './navigation-items';
 
 export interface IMobileSheetProperties extends React.HTMLAttributes<HTMLDivElement> {
   navigationRoutes: INavigationRoute[];
+  setOpen: (open: boolean) => void;
 }
 
 export function MobileSheet(properties: Readonly<IMobileSheetProperties>): React.ReactNode {
-  const { className, navigationRoutes } = properties;
+  const { className, navigationRoutes, setOpen } = properties;
   return (
     <SheetContent className="flex flex-col justify-between" side={'left'}>
       <div className="flex flex-col">
@@ -18,7 +19,7 @@ export function MobileSheet(properties: Readonly<IMobileSheetProperties>): React
           <span className="sr-only">Your Company</span>
           <Image priority className="w-auto h-8" src={logo} alt="Velocity logo" />
         </a>
-        <NavigationItems.Mobile navigationRoutes={navigationRoutes} />
+        <NavigationItems.Mobile setOpen={setOpen} navigationRoutes={navigationRoutes} />
       </div>
       <ModeToggle />
     </SheetContent>

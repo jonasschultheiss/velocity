@@ -3,6 +3,7 @@ import logo from '@/public/velocity-logo.svg';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { Typography } from '../typography';
 import { Sheet, SheetTrigger } from '../ui/sheet';
 import { MobileSheet } from './mobile-sheet';
@@ -15,9 +16,11 @@ const navigation: INavigationRoute[] = [
 ];
 
 export function Navigation() {
+  const [open, setOpen] = useState(false);
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-8">
-      <Sheet>
+      <Sheet open={open} onOpenChange={setOpen}>
         <nav className="flex items-center justify-between px-6 py-4 mx-auto" aria-label="Global">
           <Link href="/" className="-m-1.5 p-1.5 flex flex-row items-center gap-x-4">
             <span className="sr-only">Your Company</span>
@@ -39,7 +42,7 @@ export function Navigation() {
             </SheetTrigger>
           </div>
           <NavigationItems.Desktop navigationRoutes={navigation} />
-          <MobileSheet navigationRoutes={navigation} />
+          <MobileSheet setOpen={setOpen} navigationRoutes={navigation} />
         </nav>
       </Sheet>
     </header>

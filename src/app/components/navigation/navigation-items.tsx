@@ -18,16 +18,20 @@ export interface INavigationRoute {
   href: string;
 }
 
-export interface INavigaitonItemsProperties extends React.HTMLAttributes<HTMLDivElement> {
+export interface INavigatitonItemsProperties extends React.HTMLAttributes<HTMLDivElement> {
   navigationRoutes: INavigationRoute[];
 }
+export interface INavigatitonItemsMobileProperties extends INavigatitonItemsProperties {
+  setOpen: (open: boolean) => void;
+}
 
-function NavigationItemsMobile(properties: Readonly<INavigaitonItemsProperties>): React.ReactNode {
-  const { navigationRoutes, className } = properties;
+function NavigationItemsMobile(properties: Readonly<INavigatitonItemsMobileProperties>): React.ReactNode {
+  const { navigationRoutes, setOpen, className } = properties;
   return (
     <div className={cn('mt-6 space-y-2', className)}>
       {navigationRoutes.map((route) => (
         <Link
+          onClick={() => setOpen(false)}
           key={route.name}
           href={route.href}
           className="block px-3 py-2 -mx-3 text-base font-semibold leading-7 duration-100 ease-in-out rounded-lg text-muted-foreground hover:text-foreground"
@@ -41,7 +45,7 @@ function NavigationItemsMobile(properties: Readonly<INavigaitonItemsProperties>)
   );
 }
 
-function NavigationItemsDesktop(properties: Readonly<INavigaitonItemsProperties>): React.ReactNode {
+function NavigationItemsDesktop(properties: Readonly<INavigatitonItemsProperties>): React.ReactNode {
   const { navigationRoutes, className } = properties;
   const currentPath = usePathname();
 
