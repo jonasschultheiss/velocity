@@ -5,16 +5,24 @@ import { eq } from 'drizzle-orm';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { db } from 'src/db';
-import { swimmers } from 'src/db/schema';
+import { SwimmerTable } from 'src/db/schema';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const result = await db.query.swimmers.findFirst({ where: eq(swimmers.id, Number(params.id)) });
+  const result = await db.query.SwimmerTable.findFirst({ where: eq(SwimmerTable.id, Number(params.id)) });
 
   if (!result) {
     notFound();
   }
 
   const { surname, lastname, club, weight, height, birthdate, bio } = result;
+  const revalidatedData = await fetch(
+    `https://www.horus-tech.com:9387/requestData?firstname=${surname}&lastname=${lastname}&track_length=50&technique=F`,
+    {
+      next: { revalidate: 86400 },
+    },
+  );
+
+  const { mes_values: dataPoints, pred_values: regressionLine } = await revalidatedData.json();
 
   return (
     <main className="flex flex-col gap-y-4">
@@ -36,7 +44,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <Typography variant="p" component="p">
           {bio}
         </Typography>
-        <Graph />
+        <Graph dataPoints={dataPoints} regressionLine={regressionLine} />
       </div>
     </main>
   );

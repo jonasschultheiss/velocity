@@ -24,36 +24,40 @@ export const swimmerColumns: ColumnDef<SwimmerColumnType>[] = [
     ),
   },
   {
-    header: 'Surname',
-    accessorKey: 'surname',
-  },
-  {
     header: 'Lastname',
     accessorKey: 'lastname',
   },
   {
-    header: 'Club',
-    accessorKey: 'club',
+    header: 'Surname',
+    accessorKey: 'surname',
   },
-  {
-    header: 'Weight',
-    accessorKey: 'weight',
-    accessorFn: ({ height }) => {
-      return `${height} kg`;
-    },
-  },
-  {
-    header: 'Height',
-    accessorKey: 'height',
-    accessorFn: ({ height }) => {
-      return `${height} cm`;
-    },
-  },
-  {
-    header: 'Birthdate',
-    accessorKey: 'birthdate',
-    accessorFn: ({ birthdate }) => {
-      return `${birthdate.getDate()}.${birthdate.getMonth()}.${birthdate.getFullYear()}`;
-    },
-  },
+  // {
+  //   header: 'Club',
+  //   accessorKey: 'club',
+  // },
+  // {
+  //   header: 'Weight',
+  //   accessorKey: 'weight',
+  //   accessorFn: ({ height }) => {
+  //     return `${height} kg`;
+  //   },
+  // },
+  // {
+  //   header: 'Height',
+  //   accessorKey: 'height',
+  //   accessorFn: ({ height }) => {
+  //     return `${height} cm`;
+  //   },
+  // },
+  // {
+  //   header: 'Birthdate',
+  //   accessorKey: 'birthdate',
+  //   accessorFn: ({ birthdate }) => {
+  //     if (birthdate) {
+  //       return `${birthdate.getDate()}.${birthdate.getMonth()}.${birthdate.getFullYear()}`;
+  //     }
+
+  //     return <div>N/A</div>;
+  //   },
+  // },
 ];

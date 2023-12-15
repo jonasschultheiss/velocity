@@ -2,15 +2,16 @@
 
 import { AnimatedAxis, AnimatedGrid, AnimatedLineSeries, GlyphSeries, Tooltip, XYChart } from '@visx/xychart';
 import { IDataPoint } from '../../data/interfaces';
-import { useDataPoints } from '../../data/useDataPoints';
-import { useRegressionLine } from '../../data/useRegressionLine';
 import { AspectRatio } from '../ui/aspect-ratio';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 
-export default function Graph() {
-  const { regressionLine } = useRegressionLine();
-  const { dataPoints } = useDataPoints();
-
+export default function Graph({
+  dataPoints,
+  regressionLine,
+}: {
+  dataPoints: IDataPoint[];
+  regressionLine: IDataPoint[];
+}) {
   const tickLabelOffset = 15;
 
   const accessors = {

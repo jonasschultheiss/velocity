@@ -4,19 +4,19 @@ import { env } from '../env.mjs';
 
 export const psqlTable = pgTableCreator((name) => `${env.DRIZZLE_TABLE_PREAMBLE}_${name}`);
 
-export const swimmers = pgTable('swimmers', {
+export const SwimmerTable = pgTable('swimmers', {
   id: serial('id').primaryKey(),
   surname: varchar('surname', { length: 256 }).notNull(),
   lastname: varchar('lastname', { length: 256 }).notNull(),
-  club: varchar('club', { length: 256 }).notNull(),
-  weight: smallint('weight').notNull(),
-  height: smallint('height').notNull(),
-  birthdate: timestamp('birthdate', { precision: 6, withTimezone: false }).notNull(),
-  bio: varchar('bio', { length: 1024 }).notNull(),
+  club: varchar('club', { length: 256 }),
+  weight: smallint('weight'),
+  height: smallint('height'),
+  birthdate: timestamp('birthdate', { precision: 6, withTimezone: false }),
+  bio: varchar('bio', { length: 1024 }),
   instagram: varchar('instagram', { length: 256 }),
   tiktok: varchar('tiktok', { length: 256 }),
   youtube: varchar('youtube', { length: 256 }),
   twitter: varchar('twitter', { length: 256 }),
 });
 
-export type Swimmer = InferSelectModel<typeof swimmers>;
+export type Swimmer = InferSelectModel<typeof SwimmerTable>;
