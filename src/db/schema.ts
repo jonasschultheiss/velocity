@@ -20,3 +20,4 @@ export const SwimmerTable = pgTable('swimmers', {
 });
 
 export type Swimmer = InferSelectModel<typeof SwimmerTable>;
+export type SwimmerName = Pick<InferSelectModel<typeof SwimmerTable>, 'surname' | 'lastname'>;

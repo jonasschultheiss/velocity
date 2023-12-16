@@ -595,7 +595,7 @@ const seededSwimmers: Swimmer[] = [
   {
     id: 43,
     surname: 'Mollie',
-    lastname: "O'callaghan",
+    lastname: "O'Callaghan",
     club: null,
     weight: null,
     height: null,

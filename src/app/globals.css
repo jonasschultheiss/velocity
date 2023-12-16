@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 .h1 {
-  @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
+  @apply text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl;
 }
 
 .h2 {
-  @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0;
+  @apply pb-2 text-3xl font-semibold tracking-tight border-b scroll-m-20 first:mt-0;
 }
 
 .h3 {
-  @apply scroll-m-20 text-2xl font-semibold tracking-tight;
+  @apply text-2xl font-semibold tracking-tight scroll-m-20;
 }
 
 .h4 {
-  @apply scroll-m-20 text-xl font-semibold tracking-tight;
+  @apply text-xl font-semibold tracking-tight scroll-m-20;
 }
 
 .p {
@@ -23,7 +23,7 @@
 }
 
 .blockquote {
-  @apply mt-6 border-l-2 pl-6 italic;
+  @apply pl-6 mt-6 italic border-l-2;
 }
 
 .list {
