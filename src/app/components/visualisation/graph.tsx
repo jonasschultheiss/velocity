@@ -7,29 +7,34 @@ export default function Graph({
   dataPoints,
   regressionLine,
   height,
+  tooltipEnabled,
 }: {
   dataPoints: IDataPoint[];
   regressionLine: IDataPoint[];
   height: number;
+  tooltipEnabled: boolean;
 }) {
   const tickLabelOffset = 15;
-
   const accessors = {
+    xAccessor: (d: IDataPoint) => d.x,
+    yAccessor: (d: IDataPoint) => d.y,
+  };
+  const accessorsNullable = {
     xAccessor: (d: IDataPoint) => (d ? d.x : null),
     yAccessor: (d: IDataPoint) => (d ? d.y : null),
   };
 
-  const distances: number[] = [0, 50, 100, 200, 400, 800, 1500, 5000];
+  const distances: number[] = [0, 50, 100, 200, 400, 1500];
 
   return (
     <XYChart
       width={height * (16 / 9) > 900 ? height * (16 / 9) : 900}
       xScale={{ type: 'linear' }}
-      yScale={{ type: 'linear', zero: false, domain: [1.2, 2.5] }}
+      yScale={{ type: 'linear', zero: false, domain: [1.4, 2.5] }}
     >
       <AnimatedGrid
         lineStyle={{
-          stroke: '#000000',
+          stroke: '#696969',
           strokeLinecap: 'round',
           strokeWidth: 1,
         }}
@@ -47,30 +52,42 @@ export default function Graph({
         stroke="#ef4444"
         dataKey="regressionLine"
         data={regressionLine}
-        {...accessors}
+        {...accessorsNullable}
       />
-      <GlyphSeries colorAccessor={() => '#3b82f6'} data={dataPoints} dataKey="dataPoint" {...accessors} />
-      <Tooltip
-        snapTooltipToDatumX
-        snapTooltipToDatumY
-        showSeriesGlyphs
-        glyphStyle={{
-          fill: '#111111',
-          strokeWidth: 0,
-        }}
-        renderTooltip={({ tooltipData, colorScale }) => {
-          return (
-            <div className="z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2">
-              <div style={{ color: colorScale ? colorScale('dataPoint') : '#ff6969' }}>
-                {tooltipData?.datumByKey['dataPoint']?.key}
+      <GlyphSeries
+        colorAccessor={() => '#3b82f6'}
+        enableEvents
+        data={dataPoints}
+        dataKey="dataPoint"
+        {...accessorsNullable}
+      />
+      {tooltipEnabled && (
+        <Tooltip
+          snapTooltipToDatumX
+          snapTooltipToDatumY
+          showSeriesGlyphs
+          glyphStyle={{
+            fill: '#606060',
+            strokeWidth: 5,
+          }}
+          renderTooltip={({ tooltipData, colorScale }) => {
+            if (!tooltipData || tooltipData.nearestDatum?.key !== 'dataPoint') {
+              return;
+            }
+
+            return (
+              <div className="">
+                <div style={{ color: colorScale ? colorScale('dataPoint') : '#ff6969' }}>
+                  {tooltipData?.nearestDatum?.key}
+                </div>
+                {tooltipData.nearestDatum && accessors.xAccessor(tooltipData.nearestDatum.datum as IDataPoint)}
+                {', '}
+                {tooltipData.nearestDatum && accessors.yAccessor(tooltipData.nearestDatum.datum as IDataPoint)}
               </div>
-              {accessors.xAccessor(tooltipData?.datumByKey['dataPoint']?.datum as IDataPoint)}
-              {', '}
-              {accessors.yAccessor(tooltipData?.datumByKey['dataPoint']?.datum as IDataPoint)}
-            </div>
-          );
-        }}
-      />
+            );
+          }}
+        />
+      )}
     </XYChart>
   );
 }

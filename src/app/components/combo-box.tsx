@@ -20,7 +20,6 @@ export interface ICompoBoxProperties {
 }
 
 export function ComboBox({ options, optionType, initialValue }: Readonly<ICompoBoxProperties>) {
-  console.log('🚀 ~ file: combo-box.tsx:23 ~ ComboBox ~ initialValue:', initialValue);
   const [open, setOpen] = React.useState(false);
 
   return (
