@@ -15,7 +15,7 @@ export interface SwimmerGraphProperties {
 }
 
 export const TrackDictionary: Record<string, string> = {
-  '25 m': '50',
+  '25 m': '25',
   '50 m': '50',
 };
 

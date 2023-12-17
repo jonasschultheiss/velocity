@@ -23,7 +23,6 @@ export default function Graph({
 
   return (
     <XYChart
-      height={height}
       width={height * (16 / 9) > 900 ? height * (16 / 9) : 900}
       xScale={{ type: 'linear' }}
       yScale={{ type: 'linear', zero: false, domain: [1.2, 2.5] }}
