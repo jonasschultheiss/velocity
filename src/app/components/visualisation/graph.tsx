@@ -8,11 +8,15 @@ export default function Graph({
   regressionLine,
   height,
   tooltipEnabled,
+  domainUpper,
+  domainLower,
 }: {
   dataPoints: IDataPoint[];
   regressionLine: IDataPoint[];
   height: number;
   tooltipEnabled: boolean;
+  domainUpper: number;
+  domainLower: number;
 }) {
   const tickLabelOffset = 15;
   const accessors = {
@@ -30,7 +34,7 @@ export default function Graph({
     <XYChart
       width={height * (16 / 9) > 900 ? height * (16 / 9) : 900}
       xScale={{ type: 'linear' }}
-      yScale={{ type: 'linear', zero: false, domain: [1.4, 2.5] }}
+      yScale={{ type: 'linear', zero: false, domain: [domainLower, domainUpper] }}
     >
       <AnimatedGrid
         lineStyle={{

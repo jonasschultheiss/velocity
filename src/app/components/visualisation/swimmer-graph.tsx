@@ -15,6 +15,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/colla
 import { Label } from '../ui/label';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 import { Separator } from '../ui/separator';
+import { Slider } from '../ui/slider';
 import { Switch } from '../ui/switch';
 import Graph from './graph';
 import { NoData } from './no-data';
@@ -44,6 +45,8 @@ export function SwimmerGraph({ id, swimmerResponse: { data, error } }: Readonly<
   const { replace } = useRouter();
   const [tooltipEnabled, enableTooltip] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [domainUpper, setDomainUpper] = useState([250]);
+  const [domainLower, setDomainLower] = useState([140]);
 
   function setTechnique(technique: keyof typeof TechniqueDictionary) {
     params.set('technique', technique);
@@ -64,6 +67,9 @@ export function SwimmerGraph({ id, swimmerResponse: { data, error } }: Readonly<
             <CardDescription>Change how you see data</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col space-y-2">
+            <Typography variant="large" component="h4">
+              Parameters
+            </Typography>
             <ComboBox
               options={Object.keys(TechniqueDictionary).map((el) => ({
                 label: el,
@@ -84,9 +90,9 @@ export function SwimmerGraph({ id, swimmerResponse: { data, error } }: Readonly<
               optionType="track"
               initialValue={Object.keys(TrackDictionary).find((el) => TrackDictionary[el] === params.get('track'))}
             />
-            <CollapsibleContent>
+            <CollapsibleContent className="flex flex-col gap-y-2">
               <Separator className="my-4" />
-              <div className="flex items-center pt-2 space-x-2">
+              <div className="flex items-center space-x-2">
                 <Switch id="tooltip" checked={tooltipEnabled} onCheckedChange={() => enableTooltip(!tooltipEnabled)} />
                 <Label htmlFor="tooltip">
                   Enable tooltip
@@ -94,6 +100,28 @@ export function SwimmerGraph({ id, swimmerResponse: { data, error } }: Readonly<
                     Buggy
                   </Badge>
                 </Label>
+              </div>
+              <div className="flex items-center py-2 space-x-2">
+                <Label htmlFor="slider-domain-upper">Domain upper bound</Label>
+                <Slider
+                  value={domainUpper}
+                  onValueChange={(k) => setDomainUpper(k)}
+                  id="slider-domain-upper"
+                  min={0}
+                  max={300}
+                  step={10}
+                />
+              </div>
+              <div className="flex items-center py-2 space-x-2">
+                <Label htmlFor="slider-domain-lower">Domain lower bound</Label>
+                <Slider
+                  value={domainLower}
+                  onValueChange={(k) => setDomainLower(k)}
+                  id="slider-domain-lower"
+                  min={0}
+                  max={300}
+                  step={10}
+                />
               </div>
             </CollapsibleContent>
           </CardContent>
@@ -131,6 +159,8 @@ export function SwimmerGraph({ id, swimmerResponse: { data, error } }: Readonly<
             <ParentSize className="h-full">
               {({ height }) => (
                 <Graph
+                  domainUpper={domainUpper[0]! / 100}
+                  domainLower={domainLower[0]! / 100}
                   tooltipEnabled={tooltipEnabled}
                   height={height}
                   dataPoints={data!.dataPoints}
