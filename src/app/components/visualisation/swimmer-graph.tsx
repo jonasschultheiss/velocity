@@ -1,8 +1,8 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-
 import { ISwimmerResponse } from '@/lib/fetchSwimmerData';
+import ParentSize from '@visx/responsive/lib/components/ParentSize';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ComboBox } from '../combo-box';
 import { AspectRatio } from '../ui/aspect-ratio';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
@@ -72,7 +72,11 @@ export function SwimmerGraph({ id, swimmerResponse: { data, error } }: Readonly<
           {error || (!params.get('technique') && !params.get('track')) ? (
             <NoData message={error} />
           ) : (
-            <Graph dataPoints={data!.dataPoints} regressionLine={data!.regressionLine} />
+            <ParentSize className="h-full">
+              {({ height }) => (
+                <Graph height={height} dataPoints={data!.dataPoints} regressionLine={data!.regressionLine} />
+              )}
+            </ParentSize>
           )}
         </AspectRatio>
       </ScrollArea>

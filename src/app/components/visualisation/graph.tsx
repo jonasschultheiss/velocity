@@ -6,9 +6,11 @@ import { IDataPoint } from '../../data/interfaces';
 export default function Graph({
   dataPoints,
   regressionLine,
+  height,
 }: {
   dataPoints: IDataPoint[];
   regressionLine: IDataPoint[];
+  height: number;
 }) {
   const tickLabelOffset = 15;
 
@@ -21,7 +23,8 @@ export default function Graph({
 
   return (
     <XYChart
-      // margin={{ left: 60, top: 35, bottom: 38, right: 27 }}
+      height={height}
+      width={height * (16 / 9) > 1200 ? height * (16 / 9) : 1200}
       xScale={{ type: 'linear' }}
       yScale={{ type: 'linear', zero: false, domain: [1.2, 2.5] }}
     >

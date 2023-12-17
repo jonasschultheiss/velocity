@@ -24,29 +24,33 @@ export default async function Page({ params, searchParams }: Readonly<SwimmerPag
   const swimmerResponse = await fetchSwimmerData(searchParams, surname, lastname);
 
   return (
-    <main className="flex flex-col gap-y-4">
-      {params.id === '1' && (
-        <AspectRatio ratio={16 / 9}>
-          <Image
-            className="object-cover object-top rounded"
-            src={`/swimmers/${params.id}.jpeg`}
-            fill
-            alt={`Image of the swimmer ${result.surname} ${result.lastname}`}
-          />
-        </AspectRatio>
-      )}
-      <div>
-        <Typography variant="lead" component="h2">
-          {club}
-        </Typography>
-        <Typography variant="h1" component="h1">
-          {result.surname} {result.lastname}
-        </Typography>
-        <Typography variant="p" component="p">
-          {bio}
-        </Typography>
-        <SwimmerGraph id={params.id} swimmerResponse={swimmerResponse} />
+    <main className="">
+      <div className="lg:flex">
+        {params.id === '1' && (
+          <div className="w-full max-w-md">
+            <AspectRatio ratio={16 / 9}>
+              <Image
+                className="object-cover object-top rounded"
+                src={`/swimmers/${params.id}.jpeg`}
+                fill
+                alt={`Image of the swimmer ${result.surname} ${result.lastname}`}
+              />
+            </AspectRatio>
+          </div>
+        )}
+        <div className="w-full">
+          <Typography variant="lead" component="h2">
+            {club}
+          </Typography>
+          <Typography variant="h1" component="h1">
+            {result.surname} {result.lastname}
+          </Typography>
+          <Typography variant="p" component="p">
+            {bio}
+          </Typography>
+        </div>
       </div>
+      <SwimmerGraph id={params.id} swimmerResponse={swimmerResponse} />
     </main>
   );
 }
