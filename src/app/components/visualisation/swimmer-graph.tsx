@@ -38,7 +38,6 @@ export const TechniqueDictionary: Record<string, string> = {
   'Individual Medley': 'L',
 };
 
-// searchParams: { track: keyof typeof TrackDictionary; technique: keyof typeof TechniqueDictionary };
 export function SwimmerGraph({ id, swimmerResponse: { data, error } }: Readonly<SwimmerGraphProperties>) {
   const params = new URLSearchParams(useSearchParams());
   const pathname = usePathname();
