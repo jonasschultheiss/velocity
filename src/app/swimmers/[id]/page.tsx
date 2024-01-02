@@ -1,4 +1,5 @@
 import { InfoCard } from '@/components/info-card';
+import { SocialCard } from '@/components/social-card';
 import { Typography } from '@/components/typography';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,7 +23,7 @@ export default async function Page({ params, searchParams }: Readonly<SwimmerPag
     notFound();
   }
 
-  const { surname, lastname, club, weight, height, birthdate, bio } = result;
+  const { id, surname, lastname, club, weight, height, birthdate, bio, ...socials } = result;
   const swimmerResponse = await fetchSwimmerData(searchParams, surname, lastname);
 
   return (
@@ -48,7 +49,7 @@ export default async function Page({ params, searchParams }: Readonly<SwimmerPag
           </AspectRatio>
         </div>
       )}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-4">
         <InfoCard data={`${height}`} unit="cm" />
         <InfoCard data={`${weight}`} unit="kg" />
         <InfoCard data={`${birthdate}`} unit="ans" />
@@ -63,6 +64,7 @@ export default async function Page({ params, searchParams }: Readonly<SwimmerPag
             </Typography>
           </CardContent>
         </Card>
+        <SocialCard socials={socials} />
       </div>
       <SwimmerGraph id={params.id} swimmerResponse={swimmerResponse} />
     </main>
