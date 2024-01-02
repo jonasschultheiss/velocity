@@ -21,10 +21,10 @@ export function InfoCard(properties: Readonly<InfoCardProperties>): ReactNode {
 
   return (
     <Card>
-      <Typography className="flex flex-col items-center justify-between p-1" variant="h3" component="span">
+      <Typography className="flex flex-col items-center justify-between p-4" variant="h3" component="span">
         <Icon className="relative z-10 w-10 h-10 mb-2" />
         <Typography variant="large" component="span">
-          {unit === 'ans' ? new Date(data).toLocaleDateString() : data} {unit === 'ans' ? '' : unit}
+          {unit === 'ans' ? new Date(data).toLocaleDateString('de-CH') : data} {unit === 'ans' ? '' : unit}
         </Typography>
       </Typography>
     </Card>

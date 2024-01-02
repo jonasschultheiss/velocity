@@ -1,6 +1,7 @@
 import { InfoCard } from '@/components/info-card';
 import { Typography } from '@/components/typography';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { SwimmerGraph } from '@/components/visualisation/swimmer-graph';
 import { fetchSwimmerData } from '@/lib/fetchSwimmerData';
 import { eq } from 'drizzle-orm';
@@ -47,15 +48,21 @@ export default async function Page({ params, searchParams }: Readonly<SwimmerPag
           </AspectRatio>
         </div>
       )}
-      <div className="grid grid-cols-3 gap-2 ">
+      <div className="grid grid-cols-3 gap-2">
         <InfoCard data={`${height}`} unit="cm" />
         <InfoCard data={`${weight}`} unit="kg" />
         <InfoCard data={`${birthdate}`} unit="ans" />
-      </div>
-      <div className="w-full">
-        <Typography variant="p" component="p" className=" text-balance">
-          {bio}
-        </Typography>
+        <Card className="col-span-3">
+          <CardHeader>
+            <CardTitle>Biography</CardTitle>
+            <CardDescription>A concise encapsulation of the swimmer&apos;s remarkable journey</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Typography variant="p" component="p" className="w-full text-pretty">
+              {bio}
+            </Typography>
+          </CardContent>
+        </Card>
       </div>
       <SwimmerGraph id={params.id} swimmerResponse={swimmerResponse} />
     </main>
