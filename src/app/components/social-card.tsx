@@ -1,5 +1,4 @@
-'use client';
-import { useTheme } from 'next-themes';
+import Image from 'next/image';
 import { ReactNode } from 'react';
 import { Swimmer } from 'src/db/schema';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
@@ -15,8 +14,6 @@ function getAllValidSocials(socials: SocialList) {
 }
 
 export function SocialCard({ socials }: Readonly<SocialCardProperties>): ReactNode {
-  const { theme, setTheme } = useTheme();
-
   if (getAllValidSocials(socials).length === 0) {
     return;
   }
@@ -35,11 +32,15 @@ export function SocialCard({ socials }: Readonly<SocialCardProperties>): ReactNo
           }
 
           return (
-            <a
-              key={key}
-              href={value}
-              className="flex items-center justify-center w-full p-2 border bg-background/5"
-            ></a>
+            <a key={key} href={value} className="flex items-center justify-center w-full py-2 border rounded-sm">
+              <Image
+                className="dark:invert"
+                alt={`Branding logo of social media ${key}`}
+                src={`/socials/${key}.svg`}
+                height="24"
+                width="24"
+              />
+            </a>
           );
         })}
       </CardContent>
