@@ -3,11 +3,11 @@ import Link from 'next/link';
 import type { HTMLAttributes } from 'react';
 import { ModeToggle } from '../theme-provider/theme-toggle';
 import { SheetContent } from '../ui/sheet';
-import type { INavigationRoute } from './navigation-items';
+import type { NavigationRoute } from './navigation-items';
 import { NavigationItems } from './navigation-items';
 
 export interface MobileSheetProperties extends HTMLAttributes<HTMLDivElement> {
-  navigationRoutes: INavigationRoute[];
+  navigationRoutes: NavigationRoute[];
   setOpen: (open: boolean) => void;
 }
 
