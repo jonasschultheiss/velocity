@@ -1,10 +1,12 @@
 'use client';
 
 import { Bars3Icon } from '@heroicons/react/24/outline';
+import type { StaticImageData } from 'next/image';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
+import logo from '@/public/velocity-logo.svg';
 import { Typography } from '../typography';
 import { Sheet, SheetTrigger } from '../ui/sheet';
 import { MobileSheet } from './mobile-sheet';
@@ -31,12 +33,12 @@ export function Navigation(): ReactNode {
             className="-m-1.5 p-1.5 flex flex-row items-center gap-x-4"
             href="/"
           >
-            <span className="sr-only">Your Company</span>
+            <span className="sr-only">Velocity</span>
             <Image
               alt="Velocity logo"
               className="w-auto h-8 text-fill text-foreground"
               priority
-              src="velocity-logo.svg"
+              src={logo as StaticImageData}
             />
             <Typography
               className="hidden lg:block"
