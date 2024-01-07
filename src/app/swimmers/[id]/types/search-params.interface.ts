@@ -1,6 +1,9 @@
-import { TechniqueDictionary, TrackDictionary } from '@/components/visualisation/swimmer-graph';
+import type {
+  TechniqueDictionary,
+  TrackDictionary,
+} from '@/components/visualisation/swimmer-graph';
 
-export interface ISearchParams {
+export interface SearchParams {
   track: keyof typeof TrackDictionary;
   technique: keyof typeof TechniqueDictionary;
 }

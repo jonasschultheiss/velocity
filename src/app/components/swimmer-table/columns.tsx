@@ -1,9 +1,9 @@
 'use client';
 
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
-import { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
-import { Swimmer } from 'src/db/schema';
+import type { Swimmer } from 'src/db/schema';
 import { Button } from '../ui/button';
 
 export type SwimmerColumnType = Pick<

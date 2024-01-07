@@ -1,8 +1,17 @@
-import { InferSelectModel } from 'drizzle-orm';
-import { pgTable, pgTableCreator, serial, smallint, timestamp, varchar } from 'drizzle-orm/pg-core';
+import type { InferSelectModel } from 'drizzle-orm';
+import {
+  pgTable,
+  pgTableCreator,
+  serial,
+  smallint,
+  timestamp,
+  varchar,
+} from 'drizzle-orm/pg-core';
 import { env } from '../env.mjs';
 
-export const psqlTable = pgTableCreator((name) => `${env.DRIZZLE_TABLE_PREAMBLE}_${name}`);
+export const psqlTable = pgTableCreator(
+  (name) => `${env.DRIZZLE_TABLE_PREAMBLE}_${name}`,
+);
 
 export const SwimmerTable = pgTable('swimmers', {
   id: serial('id').primaryKey(),
@@ -20,4 +29,7 @@ export const SwimmerTable = pgTable('swimmers', {
 });
 
 export type Swimmer = InferSelectModel<typeof SwimmerTable>;
-export type SwimmerName = Pick<InferSelectModel<typeof SwimmerTable>, 'surname' | 'lastname'>;
+export type SwimmerName = Pick<
+  InferSelectModel<typeof SwimmerTable>,
+  'surname' | 'lastname'
+>;

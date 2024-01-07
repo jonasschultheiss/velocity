@@ -1,7 +1,8 @@
 import { sql } from '@vercel/postgres';
 import 'dotenv/config';
+import type { Swimmer } from './schema';
+import { SwimmerTable } from './schema';
 import { db } from '.';
-import { Swimmer, SwimmerTable } from './schema';
 
 const seededSwimmers: Swimmer[] = [
   {
@@ -720,12 +721,12 @@ const seededSwimmers: Swimmer[] = [
   },
 ];
 
-async function seed() {
-  const swimmers = await db
+async function seed(): Promise<void> {
+  await db
     .insert(SwimmerTable)
     .values(seededSwimmers)
     .onConflictDoNothing({ target: SwimmerTable.id });
   await sql.end();
 }
 
-seed();
+void seed();

@@ -1,27 +1,38 @@
 'use client';
 
-import { ISwimmerResponse } from '@/lib/fetchSwimmerData';
 import ParentSize from '@visx/responsive/lib/components/ParentSize';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import type { ReactElement } from 'react';
 import { useState } from 'react';
+import type { SwimmerResponse } from '@/lib/fetch-swimmer-data';
 import { ComboBox } from '../combo-box';
 import { Typography } from '../typography';
 import { AspectRatio } from '../ui/aspect-ratio';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '../ui/card';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '../ui/collapsible';
 import { Label } from '../ui/label';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 import { Separator } from '../ui/separator';
 import { Slider } from '../ui/slider';
 import { Switch } from '../ui/switch';
-import Graph from './graph';
-import { NoData } from './no-data';
+import { Graph } from './graph';
 
 export interface SwimmerGraphProperties {
-  swimmerResponse: ISwimmerResponse;
+  swimmerResponse: SwimmerResponse;
   id: string;
 }
 
@@ -38,64 +49,97 @@ export const TechniqueDictionary: Record<string, string> = {
   'Individual Medley': 'L',
 };
 
-export function SwimmerGraph({ id, swimmerResponse: { data, error } }: Readonly<SwimmerGraphProperties>) {
+const domainDefaults = {
+  upper: 250,
+  lower: 140,
+};
+
+function getDomainValue(
+  part: keyof typeof domainDefaults,
+  value: number[],
+): number {
+  return value[0] ? value[0] : domainDefaults[part];
+}
+
+export function SwimmerGraph({
+  swimmerResponse: { dataPoints, regressionLine },
+}: Readonly<SwimmerGraphProperties>): ReactElement {
   const params = new URLSearchParams(useSearchParams());
   const pathname = usePathname();
   const { replace } = useRouter();
-  const [tooltipEnabled, enableTooltip] = useState(false);
+  const [tooltipEnabled, setTooltipEnabled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [domainUpper, setDomainUpper] = useState([250]);
-  const [domainLower, setDomainLower] = useState([140]);
+  const [domainUpper, setDomainUpper] = useState([domainDefaults.upper]);
+  const [domainLower, setDomainLower] = useState([domainDefaults.lower]);
 
-  function setTechnique(technique: keyof typeof TechniqueDictionary) {
+  function setTechnique(technique: keyof typeof TechniqueDictionary): void {
     params.set('technique', technique);
     replace(`${pathname}?${params.toString()}`);
   }
 
-  function setTrack(track: keyof typeof TrackDictionary) {
+  function setTrack(track: keyof typeof TrackDictionary): void {
     params.set('track', track);
     replace(`${pathname}?${params.toString()}`);
   }
 
   return (
     <div className="flex flex-col gap-y-4">
-      <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full space-y-2">
+      <Collapsible
+        className="w-full space-y-2"
+        onOpenChange={setIsOpen}
+        open={isOpen}
+      >
         <Card>
           <CardHeader>
             <CardTitle>Graph controls</CardTitle>
             <CardDescription>Change how you see data</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col space-y-2">
-            <Typography variant="large" component="h4">
+            <Typography component="h4" variant="large">
               Parameters
             </Typography>
             <ComboBox
-              options={Object.keys(TechniqueDictionary).map((el) => ({
-                label: el,
-                value: el,
-                onClick: () => setTechnique(TechniqueDictionary[el] || 'F'),
-              }))}
-              optionType="technique"
               initialValue={Object.keys(TechniqueDictionary).find(
                 (el) => TechniqueDictionary[el] === params.get('technique'),
               )}
+              optionType="technique"
+              options={Object.keys(TechniqueDictionary).map((el) => ({
+                label: el,
+                value: el,
+                onClick: () => {
+                  setTechnique(TechniqueDictionary[el] || 'F');
+                },
+              }))}
             />
             <ComboBox
+              initialValue={Object.keys(TrackDictionary).find(
+                (el) => TrackDictionary[el] === params.get('track'),
+              )}
+              optionType="track"
               options={Object.keys(TrackDictionary).map((el) => ({
                 label: el,
                 value: el,
-                onClick: () => setTrack(TrackDictionary[el] || '25'),
+                onClick: () => {
+                  setTrack(TrackDictionary[el] || '25');
+                },
               }))}
-              optionType="track"
-              initialValue={Object.keys(TrackDictionary).find((el) => TrackDictionary[el] === params.get('track'))}
             />
             <CollapsibleContent className="flex flex-col gap-y-2">
               <Separator className="my-4" />
               <div className="flex items-center space-x-2">
-                <Switch id="tooltip" checked={tooltipEnabled} onCheckedChange={() => enableTooltip(!tooltipEnabled)} />
+                <Switch
+                  checked={tooltipEnabled}
+                  id="tooltip"
+                  onCheckedChange={() => {
+                    setTooltipEnabled(!tooltipEnabled);
+                  }}
+                />
                 <Label htmlFor="tooltip">
                   Enable tooltip
-                  <Badge className="relative z-10 ml-1 bottom-2" variant="destructive">
+                  <Badge
+                    className="relative z-10 ml-1 bottom-2"
+                    variant="destructive"
+                  >
                     Buggy
                   </Badge>
                 </Label>
@@ -103,40 +147,44 @@ export function SwimmerGraph({ id, swimmerResponse: { data, error } }: Readonly<
               <div className="flex items-center py-2 space-x-2">
                 <Label htmlFor="slider-domain-upper">Domain upper bound</Label>
                 <Slider
-                  value={domainUpper}
-                  onValueChange={(k) => setDomainUpper(k)}
                   id="slider-domain-upper"
-                  min={0}
                   max={300}
+                  min={0}
+                  onValueChange={(k) => {
+                    setDomainUpper(k);
+                  }}
                   step={10}
+                  value={domainUpper}
                 />
               </div>
               <div className="flex items-center py-2 space-x-2">
                 <Label htmlFor="slider-domain-lower">Domain lower bound</Label>
                 <Slider
-                  value={domainLower}
-                  onValueChange={(k) => setDomainLower(k)}
                   id="slider-domain-lower"
-                  min={0}
                   max={300}
+                  min={0}
+                  onValueChange={(k) => {
+                    setDomainLower(k);
+                  }}
                   step={10}
+                  value={domainLower}
                 />
               </div>
             </CollapsibleContent>
           </CardContent>
           <CardFooter>
             <CollapsibleTrigger asChild>
-              <Button variant="ghost" className="">
+              <Button className="" variant="ghost">
                 {isOpen ? (
                   <>
-                    <Typography variant="small" component="span">
+                    <Typography component="span" variant="small">
                       Collapse
                     </Typography>
                     <ChevronUp className="w-4 h-4 ml-2" />
                   </>
                 ) : (
                   <>
-                    <Typography variant="small" component="span">
+                    <Typography component="span" variant="small">
                       Expand
                     </Typography>
                     <ChevronDown className="w-4 h-4 ml-2" />
@@ -152,22 +200,18 @@ export function SwimmerGraph({ id, swimmerResponse: { data, error } }: Readonly<
       <ScrollArea className="my-2 border rounded-md">
         <ScrollBar orientation="horizontal" />
         <AspectRatio ratio={16 / 9}>
-          {error || (!params.get('technique') && !params.get('track')) ? (
-            <NoData message={error} />
-          ) : (
-            <ParentSize className="h-full">
-              {({ height }) => (
-                <Graph
-                  domainUpper={domainUpper[0]! / 100}
-                  domainLower={domainLower[0]! / 100}
-                  tooltipEnabled={tooltipEnabled}
-                  height={height}
-                  dataPoints={data!.dataPoints}
-                  regressionLine={data!.regressionLine}
-                />
-              )}
-            </ParentSize>
-          )}
+          <ParentSize className="h-full">
+            {({ height }) => (
+              <Graph
+                dataPoints={dataPoints}
+                domainLower={getDomainValue('lower', domainLower)}
+                domainUpper={getDomainValue('upper', domainUpper)}
+                height={height}
+                regressionLine={regressionLine}
+                tooltipEnabled={tooltipEnabled}
+              />
+            )}
+          </ParentSize>
         </AspectRatio>
       </ScrollArea>
     </div>

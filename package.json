@@ -3,16 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "db:push": "dotenv drizzle-kit push:pg",
     "db:generate": "dotenv drizzle-kit generate:pg",
+    "db:push": "dotenv drizzle-kit push:pg",
     "db:run": "tsx src/db/migrate.ts",
     "db:seed": "tsx src/db/seed.ts",
-    "db:studio": "dotenv drizzle-kit studio"
+    "db:studio": "dotenv drizzle-kit studio",
+    "dev": "next dev",
+    "lint": "next lint",
+    "prepare": "husky install",
+    "start": "next start"
   },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "yarn prettier --write",
+      "yarn eslint --fix"
+    ]
+  },
+  "prettier": "@vercel/style-guide/prettier",
   "dependencies": {
     "@heroicons/react": "^2.0.18",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
@@ -49,7 +57,6 @@
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "drizzle-orm": "^0.29.1",
-    "eslint-plugin-drizzle": "^0.2.2",
     "geist": "^1.2.0",
     "lucide-react": "^0.294.0",
     "next": "14.0.4",
@@ -64,13 +71,21 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@vercel/style-guide": "^5.1.0",
     "autoprefixer": "^10.0.1",
+    "dotenv": "^16.3.1",
     "dotenv-cli": "^7.3.0",
     "drizzle-kit": "^0.20.6",
-    "eslint": "^8",
+    "eslint": "^8.56.0",
     "eslint-config-next": "14.0.3",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-drizzle": "^0.2.3",
+    "eslint-plugin-prettier": "^5.1.2",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.2.0",
     "pg": "^8.11.3",
     "postcss": "^8",
+    "prettier": "^3.1.1",
     "tailwindcss": "^3.3.0",
     "tsx": "^4.6.2",
     "typescript": "^5"

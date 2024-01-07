@@ -1,4 +1,5 @@
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import type { ReactElement } from 'react';
 import { Typography } from '../typography';
 
 export interface NoDataProperties {
@@ -11,7 +12,8 @@ const statusMessage = {
   },
   notEnoughData: {
     title: 'Not enough data',
-    message: 'There is not enough data available for this swimmer with the current selection',
+    message:
+      'There is not enough data available for this swimmer with the current selection',
   },
   noSelection: {
     title: 'Parameters not selected',
@@ -19,7 +21,7 @@ const statusMessage = {
   },
 };
 
-export function NoData({ message }: Readonly<NoDataProperties>) {
+export function NoData({ message }: Readonly<NoDataProperties>): ReactElement {
   let currentMessage = statusMessage.noSelection;
   if (message?.includes('Not enough data')) {
     currentMessage = statusMessage.notEnoughData;
@@ -31,11 +33,13 @@ export function NoData({ message }: Readonly<NoDataProperties>) {
 
   return (
     <div className="flex flex-col items-center justify-center h-full p-4 text-center">
-      {message && <ExclamationTriangleIcon className="w-12 h-12 text-yellow-500" />}
-      <Typography variant="large" component="em" className="mt-4 not-italic">
+      {message ? (
+        <ExclamationTriangleIcon className="w-12 h-12 text-yellow-500" />
+      ) : null}
+      <Typography className="mt-4 not-italic" component="em" variant="large">
         {currentMessage.title}
       </Typography>
-      <Typography variant="small" component="p" className="max-w-xs mt-0">
+      <Typography className="max-w-xs mt-0" component="p" variant="small">
         {currentMessage.message}
       </Typography>
     </div>

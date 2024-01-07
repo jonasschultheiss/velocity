@@ -36,24 +36,32 @@ type TypographyElement =
   | 'small';
 
 export interface TypographyProperties {
-  readonly variant: TypographyVariant;
+  variant: TypographyVariant;
   text?: string;
   htmlFor?: string;
   component: TypographyElement;
   className?: string;
-  children?: ReactNode | Array<ReactNode>;
+  children?: ReactNode | ReactNode[];
 }
 
 /**
   - Use typography to visualize text
 **/
-export function Typography(properties: Readonly<TypographyProperties>): React.ReactNode {
-  const { variant, component, text, className, htmlFor, children } = properties;
-
+export function Typography({
+  variant = 'h1',
+  component,
+  text,
+  className,
+  htmlFor,
+  children,
+}: TypographyProperties): React.ReactNode {
   const TextWrapper = component;
 
   return (
-    <TextWrapper htmlFor={htmlFor} className={`${variant ?? 'h1'}${className ? ' ' + className : ''}`}>
+    <TextWrapper
+      className={`${variant}${className ? ` ${className}` : ''}`}
+      htmlFor={htmlFor}
+    >
       {children ?? text}
     </TextWrapper>
   );

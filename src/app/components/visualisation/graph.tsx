@@ -1,9 +1,17 @@
 'use client';
 
-import { AnimatedAxis, AnimatedGrid, AnimatedLineSeries, GlyphSeries, Tooltip, XYChart } from '@visx/xychart';
-import { IDataPoint } from '../../data/interfaces';
+import {
+  AnimatedAxis,
+  AnimatedGrid,
+  AnimatedLineSeries,
+  GlyphSeries,
+  Tooltip,
+  XYChart,
+} from '@visx/xychart';
+import type { ReactElement } from 'react';
+import type { DataPoint } from '../../lib/data-point.interface';
 
-export default function Graph({
+export function Graph({
   dataPoints,
   regressionLine,
   height,
@@ -11,21 +19,21 @@ export default function Graph({
   domainUpper,
   domainLower,
 }: {
-  dataPoints: IDataPoint[];
-  regressionLine: IDataPoint[];
+  dataPoints: DataPoint[];
+  regressionLine: DataPoint[];
   height: number;
   tooltipEnabled: boolean;
   domainUpper: number;
   domainLower: number;
-}) {
+}): ReactElement {
   const tickLabelOffset = 15;
   const accessors = {
-    xAccessor: (d: IDataPoint) => d.x,
-    yAccessor: (d: IDataPoint) => d.y,
+    xAccessor: (d: DataPoint) => d.x,
+    yAccessor: (d: DataPoint) => d.y,
   };
   const accessorsNullable = {
-    xAccessor: (d: IDataPoint) => (d ? d.x : null),
-    yAccessor: (d: IDataPoint) => (d ? d.y : null),
+    xAccessor: (d: DataPoint | null) => (d ? d.x : null),
+    yAccessor: (d: DataPoint | null) => (d ? d.y : null),
   };
 
   const distances: number[] = [0, 50, 100, 200, 400, 1500];
@@ -34,7 +42,11 @@ export default function Graph({
     <XYChart
       width={height * (16 / 9) > 900 ? height * (16 / 9) : 900}
       xScale={{ type: 'linear' }}
-      yScale={{ type: 'linear', zero: false, domain: [domainLower, domainUpper] }}
+      yScale={{
+        type: 'linear',
+        zero: false,
+        domain: [domainLower, domainUpper],
+      }}
     >
       <AnimatedGrid
         lineStyle={{
@@ -45,31 +57,33 @@ export default function Graph({
         strokeDasharray="0, 4"
       />
       <AnimatedAxis
-        tickValues={distances}
         hideAxisLine
         orientation="bottom"
         tickLabelProps={() => ({ dy: tickLabelOffset })}
+        tickValues={distances}
       />
-      <AnimatedAxis hideAxisLine orientation="left" numTicks={4} tickLabelProps={() => ({ dx: -10 })} />
+      <AnimatedAxis
+        hideAxisLine
+        numTicks={4}
+        orientation="left"
+        tickLabelProps={() => ({ dx: -10 })}
+      />
       <AnimatedLineSeries
+        data={regressionLine}
+        dataKey="regressionLine"
         enableEvents={false}
         stroke="#ef4444"
-        dataKey="regressionLine"
-        data={regressionLine}
         {...accessorsNullable}
       />
       <GlyphSeries
         colorAccessor={() => '#3b82f6'}
-        enableEvents
         data={dataPoints}
         dataKey="dataPoint"
+        enableEvents
         {...accessorsNullable}
       />
-      {tooltipEnabled && (
+      {tooltipEnabled ? (
         <Tooltip
-          snapTooltipToDatumX
-          snapTooltipToDatumY
-          showSeriesGlyphs
           glyphStyle={{
             fill: '#606060',
             strokeWidth: 5,
@@ -81,17 +95,28 @@ export default function Graph({
 
             return (
               <div className="">
-                <div style={{ color: colorScale ? colorScale('dataPoint') : '#ff6969' }}>
-                  {tooltipData?.nearestDatum?.key}
+                <div
+                  style={{
+                    color: colorScale ? colorScale('dataPoint') : '#ff6969',
+                  }}
+                >
+                  {tooltipData.nearestDatum.key}
                 </div>
-                {tooltipData.nearestDatum && accessors.xAccessor(tooltipData.nearestDatum.datum as IDataPoint)}
+                {accessors.xAccessor(
+                  tooltipData.nearestDatum.datum as DataPoint,
+                )}
                 {', '}
-                {tooltipData.nearestDatum && accessors.yAccessor(tooltipData.nearestDatum.datum as IDataPoint)}
+                {accessors.yAccessor(
+                  tooltipData.nearestDatum.datum as DataPoint,
+                )}
               </div>
             );
           }}
+          showSeriesGlyphs
+          snapTooltipToDatumX
+          snapTooltipToDatumY
         />
-      )}
+      ) : null}
     </XYChart>
   );
 }

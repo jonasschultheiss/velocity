@@ -1,19 +1,20 @@
+import type { ReactElement } from 'react';
+import { Suspense } from 'react';
 import { TableWrapper } from '@/components/swimmer-table/table-wrapper';
 import { Typography } from '@/components/typography';
-import { Suspense } from 'react';
 
-export default function Page() {
+export default function Page(): ReactElement {
   return (
     <div>
-      <Typography variant="h1" component="h1">
+      <Typography component="h1" variant="h1">
         All swimmers
       </Typography>
-      <Typography variant="p" component="p">
+      <Typography component="p" variant="p">
         This data table
       </Typography>
       <Suspense
         fallback={
-          <Typography variant="muted" component="span">
+          <Typography component="span" variant="muted">
             Loading
           </Typography>
         }
