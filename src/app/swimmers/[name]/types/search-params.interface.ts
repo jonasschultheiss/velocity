@@ -3,7 +3,7 @@ import type {
   TrackDictionary,
 } from '@/components/visualisation/swimmer-graph';
 
-export interface SearchParams {
+export interface DefinedSearchParams extends Record<string, string> {
   track: keyof typeof TrackDictionary;
   technique: keyof typeof TechniqueDictionary;
 }

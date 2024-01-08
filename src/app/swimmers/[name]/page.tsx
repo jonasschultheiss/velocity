@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { and, ilike } from 'drizzle-orm';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { ReactElement } from 'react';
@@ -13,31 +13,44 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-// import { SwimmerGraph } from '@/components/visualisation/swimmer-graph';
-// import { fetchSwimmerData } from '@/lib/fetch-swimmer-data';
 import { db } from 'src/db';
+import type { SwimmerName } from 'src/db/schema';
 import { SwimmerTable } from 'src/db/schema';
+import { NAME_SPLIT } from '@/lib/utils';
 import type { SearchParams } from './types/search-params.interface';
 
 export interface SwimmerPageProperties {
-  params: { id: string };
+  params: { name: string };
   searchParams: SearchParams;
+}
+
+function splitName(param: string): SwimmerName {
+  const [surname, lastname] = param.split(NAME_SPLIT);
+  if (!surname || !lastname) {
+    notFound();
+  }
+
+  return { surname, lastname };
 }
 
 export default async function Page({
   params,
-  // searchParams,
 }: Readonly<SwimmerPageProperties>): Promise<ReactElement> {
+  const name = splitName(params.name);
   const result = await db.query.SwimmerTable.findFirst({
-    where: eq(SwimmerTable.id, Number(params.id)),
+    where: and(
+      ilike(SwimmerTable.surname, name.surname),
+      ilike(SwimmerTable.lastname, name.lastname),
+    ),
   });
+
   if (!result) {
     notFound();
   }
 
   const {
-    // surname,
-    // lastname,
+    surname,
+    lastname,
     club,
     weight,
     height,
@@ -45,31 +58,26 @@ export default async function Page({
     bio,
     ...socials
   } = result;
-  // const swimmerResponse = await fetchSwimmerData(
-  //   searchParams,
-  //   surname,
-  //   lastname,
-  // );
 
   return (
-    <main className="flex flex-col mt-16 gap-y-4">
+    <>
       <section className="w-full mb-4 text-balance">
         <Typography component="h2" variant="lead">
           {club}
         </Typography>
         <Typography component="h1" variant="h1">
-          {result.surname} {result.lastname}
+          {surname} {lastname}
         </Typography>
       </section>
 
-      {params.id === '1' && (
+      {params.name === 'cameron_mcevoy' && (
         <div className="w-full max-w-md">
           <AspectRatio ratio={16 / 9}>
             <Image
-              alt={`Image of the swimmer ${result.surname} ${result.lastname}`}
+              alt={`Image of the swimmer ${surname} ${lastname}`}
               className="object-cover object-top rounded"
               fill
-              src={`/swimmers/${params.id}.jpeg`}
+              src={`/swimmers/${params.name}.jpeg`}
             />
           </AspectRatio>
         </div>
@@ -97,7 +105,6 @@ export default async function Page({
         </Card>
         <SocialCard socials={socials} />
       </div>
-      {/* <SwimmerGraph id={params.id} swimmerResponse={swimmerResponse} /> */}
-    </main>
+    </>
   );
 }

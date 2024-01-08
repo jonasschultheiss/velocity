@@ -1,5 +1,4 @@
-import type { SearchParams } from '@/swimmers/[id]/types/search-params.interface';
-import { DEFAULT_PARAMS } from '@/swimmers/[id]/types/search-params.interface';
+import type { SearchParams } from '@/swimmers/[name]/types/search-params.interface';
 import type { DataPoint } from './data-point.interface';
 
 export interface SwimmerResponse {
@@ -22,9 +21,7 @@ export async function fetchSwimmerData(
   }
 
   const response = await fetch(
-    `https://www.horus-tech.com:9387/requestData?firstname=${surname}&lastname=${lastname}&track_length=${
-      track || DEFAULT_PARAMS.track
-    }&technique=${technique || DEFAULT_PARAMS.technique}`,
+    `https://www.horus-tech.com:9387/requestData?firstname=${surname}&lastname=${lastname}&track_length=${track}&technique=${technique}`,
     {
       next: { revalidate: 86400 },
     },

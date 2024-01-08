@@ -194,26 +194,26 @@ export function SwimmerGraph({
               </Button>
             </CollapsibleTrigger>
           </CardFooter>
+          <Separator />
+          <ScrollArea className="p-2 pt-0 ">
+            <ScrollBar orientation="horizontal" />
+            <AspectRatio ratio={16 / 9}>
+              <ParentSize className="h-full">
+                {({ height }) => (
+                  <Graph
+                    dataPoints={dataPoints}
+                    domainLower={getDomainValue('lower', domainLower)}
+                    domainUpper={getDomainValue('upper', domainUpper)}
+                    height={height}
+                    regressionLine={regressionLine}
+                    tooltipEnabled={tooltipEnabled}
+                  />
+                )}
+              </ParentSize>
+            </AspectRatio>
+          </ScrollArea>
         </Card>
       </Collapsible>
-
-      <ScrollArea className="my-2 border rounded-md">
-        <ScrollBar orientation="horizontal" />
-        <AspectRatio ratio={16 / 9}>
-          <ParentSize className="h-full">
-            {({ height }) => (
-              <Graph
-                dataPoints={dataPoints}
-                domainLower={getDomainValue('lower', domainLower)}
-                domainUpper={getDomainValue('upper', domainUpper)}
-                height={height}
-                regressionLine={regressionLine}
-                tooltipEnabled={tooltipEnabled}
-              />
-            )}
-          </ParentSize>
-        </AspectRatio>
-      </ScrollArea>
     </div>
   );
 }

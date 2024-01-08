@@ -5,23 +5,29 @@ import type { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
 import type { Swimmer } from 'src/db/schema';
 import { Button } from '../ui/button';
+import { NAME_SPLIT } from '@/lib/utils';
 
 export type SwimmerColumnType = Pick<
   Swimmer,
-  'id' | 'surname' | 'lastname' | 'club' | 'weight' | 'height' | 'birthdate'
+  'surname' | 'lastname' | 'club' | 'weight' | 'height' | 'birthdate'
 >;
 
 export const swimmerColumns: ColumnDef<SwimmerColumnType>[] = [
   {
     header: 'Link',
     accessorKey: 'id',
-    cell: ({ row }) => (
-      <Button asChild variant="link">
-        <Link href={`/swimmers/${row.original.id}`}>
-          <ArrowTopRightOnSquareIcon className="w-4 h-4" />
-        </Link>
-      </Button>
-    ),
+    cell: ({ row }) => {
+      const { surname, lastname } = row.original;
+      return (
+        <Button asChild variant="link">
+          <Link
+            href={`/swimmers/${surname.toLocaleLowerCase()}${NAME_SPLIT}${lastname.toLocaleLowerCase()}`}
+          >
+            <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+          </Link>
+        </Button>
+      );
+    },
   },
   {
     header: 'Lastname',
