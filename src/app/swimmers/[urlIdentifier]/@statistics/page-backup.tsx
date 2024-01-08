@@ -8,7 +8,7 @@ import type { ReactElement } from 'react';
 import { fetchSwimmerData } from '@/lib/fetch-swimmer-data';
 import { db } from 'src/db';
 import { SwimmerTable } from 'src/db/schema';
-import { SwimmerGraph } from '@/components/visualisation/swimmer-graph';
+import { SwimmerGraph } from '@/components/visualisation/swimmer-graph-wrapper';
 import type { SearchParams } from '../types/search-params.interface';
 
 export interface SwimmerPageProperties {

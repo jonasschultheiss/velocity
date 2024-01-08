@@ -4,7 +4,7 @@ export interface RegressionLine {
   dataPoints: DataPoint[];
 }
 
-export function useDataPoints(): RegressionLine {
+export function getDataPoints(): RegressionLine {
   return {
     dataPoints: [
       {

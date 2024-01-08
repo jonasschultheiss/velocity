@@ -14,29 +14,19 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { db } from 'src/db';
-import type { SwimmerName } from 'src/db/schema';
 import { SwimmerTable } from 'src/db/schema';
-import { NAME_SPLIT } from '@/lib/utils';
-import type { SearchParams } from './types/search-params.interface';
+import { urlIdentifierToName } from '@/lib/utils';
+import type { DefinedSearchParams } from './types/search-params.interface';
 
 export interface SwimmerPageProperties {
-  params: { name: string };
-  searchParams: SearchParams;
-}
-
-function splitName(param: string): SwimmerName {
-  const [surname, lastname] = param.split(NAME_SPLIT);
-  if (!surname || !lastname) {
-    notFound();
-  }
-
-  return { surname, lastname };
+  params: { urlIdentifier: string };
+  searchParams: DefinedSearchParams;
 }
 
 export default async function Page({
-  params,
+  params: { urlIdentifier },
 }: Readonly<SwimmerPageProperties>): Promise<ReactElement> {
-  const name = splitName(params.name);
+  const name = urlIdentifierToName(urlIdentifier);
   const result = await db.query.SwimmerTable.findFirst({
     where: and(
       ilike(SwimmerTable.surname, name.surname),
@@ -70,14 +60,14 @@ export default async function Page({
         </Typography>
       </section>
 
-      {params.name === 'cameron_mcevoy' && (
+      {urlIdentifier === 'cameron_mcevoy' && (
         <div className="w-full max-w-md">
           <AspectRatio ratio={16 / 9}>
             <Image
               alt={`Image of the swimmer ${surname} ${lastname}`}
               className="object-cover object-top rounded"
               fill
-              src={`/swimmers/${params.name}.jpeg`}
+              src={`/swimmers/${urlIdentifier}.jpeg`}
             />
           </AspectRatio>
         </div>
