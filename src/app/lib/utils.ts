@@ -23,8 +23,8 @@ export const TechniqueDictionary: Record<string, string> = {
 };
 
 export const domainDefaults = {
-  upper: 250,
-  lower: 140,
+  upper: 160,
+  lower: 80,
 };
 
 export function getDomainValue(

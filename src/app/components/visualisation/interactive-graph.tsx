@@ -120,8 +120,8 @@ export function InteractiveGraph({
               {({ height }) => (
                 <Graph
                   dataPoints={data.dataPoints}
-                  domainLower={getDomainValue('lower', domainLower)}
-                  domainUpper={getDomainValue('upper', domainUpper)}
+                  domainLower={getDomainValue('lower', domainLower) / 100}
+                  domainUpper={getDomainValue('upper', domainUpper) / 100}
                   height={height}
                   regressionLine={data.regressionLine}
                   tooltipEnabled={tooltipEnabled}
