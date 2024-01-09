@@ -65,7 +65,7 @@ export default async function Page({
           <AspectRatio ratio={16 / 9}>
             <Image
               alt={`Image of the swimmer ${surname} ${lastname}`}
-              className="object-cover object-top rounded"
+              className="object-cover object-top rounded-lg"
               fill
               src={`/swimmers/${urlIdentifier}.jpeg`}
             />

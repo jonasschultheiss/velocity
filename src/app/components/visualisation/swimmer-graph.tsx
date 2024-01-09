@@ -1,61 +1,26 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion -- Timely reasons TODO: remove*/
+'use client';
+
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { ReactElement } from 'react';
-import {
-  fetchSwimmerData,
-  type SwimmerResponse,
-} from '@/lib/fetch-swimmer-data';
-import {
-  TechniqueDictionary,
-  TrackDictionary,
-  urlIdentifierToName,
-  useSwimmerValues,
-} from '@/lib/utils';
+import { TechniqueDictionary, TrackDictionary } from '@/lib/utils';
+import type { SwimmerPossibilities } from '@/lib/fetch-swimmer-options';
 import { ComboBox } from '../combo-box';
 import { Typography } from '../typography';
-import { InteractiveGraph } from './interactive-graph';
-import { SwimmerName } from 'src/db/schema';
-import { DefinedSearchParams } from '@/swimmers/[urlIdentifier]/types/search-params.interface';
 
 export interface SwimmerGraphProperties {
-  urlIdentifier: string;
+  possibleOptions: SwimmerPossibilities;
 }
 
-export async function SwimmerGraph({
-  urlIdentifier,
-}: SwimmerGraphProperties): Promise<ReactElement> {
+export function SwimmerGraph({
+  possibleOptions,
+}: SwimmerGraphProperties): ReactElement {
   const params = new URLSearchParams(useSearchParams());
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const fullName = urlIdentifierToName(urlIdentifier);
-  const valueMap = await useSwimmerValues(fullName);
-  let firstValidKey = '';
-
-  for (const [key, value] of valueMap.entries()) {
-    if (typeof value !== 'string') {
-      firstValidKey = key;
-      break;
-    }
-  }
-
   function replaceParams(): void {
     replace(`${pathname}?${params.toString()}`, { scroll: false });
-  }
-
-  if (
-    typeof valueMap.get(`${params.get('technique')}-${params.get('track')}`) ===
-    'string'
-  ) {
-    const [technique, track] = firstValidKey.split('-');
-    if (!technique || !track) {
-      throw new Error(
-        'You found a really rare error, where a swimmer has no displable graphs. Please report this to the developers.',
-      );
-    }
-
-    params.set('technique', technique);
-    params.set('track', track);
-    replaceParams();
   }
 
   function setTechnique(technique: keyof typeof TechniqueDictionary): void {
@@ -66,6 +31,32 @@ export async function SwimmerGraph({
   function setTrack(track: keyof typeof TrackDictionary): void {
     params.set('track', track);
     replaceParams();
+  }
+
+  function shouldBeDisabled(type: 'technique' | 'track', el: string): boolean {
+    const technique = params.get('technique');
+    const track = params.get('track');
+
+    if (type === 'technique' && el === 'B') {
+      console.log(`${el}-${track}`);
+      console.log(
+        `case a: ${Boolean(
+          possibleOptions[`${el}-${track}` as keyof SwimmerPossibilities],
+        )}`,
+      );
+    }
+
+    if (type === 'track' && technique) {
+      return possibleOptions[
+        `${technique}-${el}` as keyof SwimmerPossibilities
+      ];
+    }
+
+    if (type === 'technique' && track) {
+      return possibleOptions[`${el}-${track}` as keyof SwimmerPossibilities];
+    }
+
+    return false;
   }
 
   return (
@@ -81,6 +72,7 @@ export async function SwimmerGraph({
         options={Object.keys(TechniqueDictionary).map((el) => ({
           label: el,
           value: el,
+          // disabled: shouldBeDisabled('technique', TechniqueDictionary[el]!),
           onClick: () => {
             setTechnique(TechniqueDictionary[el] || 'F');
           },
@@ -94,11 +86,13 @@ export async function SwimmerGraph({
         options={Object.keys(TrackDictionary).map((el) => ({
           label: el,
           value: el,
+          // disabled: shouldBeDisabled('track', TrackDictionary[el]!),
           onClick: () => {
             setTrack(TrackDictionary[el] || '25');
           },
         }))}
       />
+
       {/* <InteractiveGraph swimmerResponse={{ dataPoints, regressionLine }} /> */}
     </div>
   );

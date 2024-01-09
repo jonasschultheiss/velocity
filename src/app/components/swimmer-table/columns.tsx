@@ -4,8 +4,8 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import type { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
 import type { Swimmer } from 'src/db/schema';
-import { Button } from '../ui/button';
 import { NAME_SPLIT } from '@/lib/utils';
+import { Button } from '../ui/button';
 
 export type SwimmerColumnType = Pick<
   Swimmer,
