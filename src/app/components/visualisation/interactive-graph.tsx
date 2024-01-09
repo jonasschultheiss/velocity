@@ -21,13 +21,14 @@ import { Separator } from '../ui/separator';
 import { Slider } from '../ui/slider';
 import { Switch } from '../ui/switch';
 import { Graph } from './graph';
+import { NoData } from './no-data';
 
 export interface InteractiveGraphProperties {
-  swimmerResponse: SwimmerResponse;
+  data: SwimmerResponse | null;
 }
 
 export function InteractiveGraph({
-  swimmerResponse: { dataPoints, regressionLine },
+  data,
 }: Readonly<InteractiveGraphProperties>): ReactElement {
   const [tooltipEnabled, setTooltipEnabled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -114,18 +115,22 @@ export function InteractiveGraph({
       <ScrollArea className="p-2 pt-0 ">
         <ScrollBar orientation="horizontal" />
         <AspectRatio ratio={16 / 9}>
-          <ParentSize className="h-full">
-            {({ height }) => (
-              <Graph
-                dataPoints={dataPoints}
-                domainLower={getDomainValue('lower', domainLower)}
-                domainUpper={getDomainValue('upper', domainUpper)}
-                height={height}
-                regressionLine={regressionLine}
-                tooltipEnabled={tooltipEnabled}
-              />
-            )}
-          </ParentSize>
+          {data ? (
+            <ParentSize className="h-full">
+              {({ height }) => (
+                <Graph
+                  dataPoints={data.dataPoints}
+                  domainLower={getDomainValue('lower', domainLower)}
+                  domainUpper={getDomainValue('upper', domainUpper)}
+                  height={height}
+                  regressionLine={data.regressionLine}
+                  tooltipEnabled={tooltipEnabled}
+                />
+              )}
+            </ParentSize>
+          ) : (
+            <NoData />
+          )}
         </AspectRatio>
       </ScrollArea>
     </Collapsible>

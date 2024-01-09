@@ -1,14 +1,12 @@
 import { Suspense, type ReactElement } from 'react';
-import type { ReadonlyURLSearchParams } from 'next/navigation';
 import { Typography } from '@/components/typography';
 import { SwimmerGraph } from '@/components/visualisation/swimmer-graph';
-import {
-  SwimmerPossibilities,
-  fetchPossibleOptions,
-} from '@/lib/fetch-swimmer-options';
+import type { SwimmerPossibilities } from '@/lib/fetch-swimmer-options';
+import { fetchPossibleOptions } from '@/lib/fetch-swimmer-options';
 import { urlIdentifierToName } from '@/lib/utils';
-import { DefinedSearchParams } from '../types/search-params.interface';
-import { log } from 'console';
+import type { SwimmerResponse } from '@/lib/fetch-swimmer-data';
+import { fetchSwimmerData } from '@/lib/fetch-swimmer-data';
+import type { DefinedSearchParams } from '../types/search-params.interface';
 
 export interface SwimmerStatisticsPageProperties {
   params: { urlIdentifier: string };
@@ -21,12 +19,14 @@ export default async function Page({
 }: SwimmerStatisticsPageProperties): Promise<ReactElement> {
   const fullName = urlIdentifierToName(urlIdentifier);
   const possibleOptions = await fetchPossibleOptions(fullName);
-
-  log(
-    Boolean(
-      possibleOptions[`${technique}-${track}` as keyof SwimmerPossibilities],
-    ),
-  );
+  let swimmerResponse: SwimmerResponse | null = null;
+  if (possibleOptions[`${technique}-${track}` as keyof SwimmerPossibilities]) {
+    swimmerResponse = await fetchSwimmerData(
+      { technique, track },
+      fullName.surname,
+      fullName.lastname,
+    );
+  }
 
   return (
     <div className="flex flex-col gap-y-4">
@@ -37,7 +37,10 @@ export default async function Page({
         Change how you see data
       </Typography>
       <Suspense fallback={<div>Loading...</div>}>
-        <SwimmerGraph possibleOptions={possibleOptions} />
+        <SwimmerGraph
+          data={swimmerResponse}
+          possibleOptions={possibleOptions}
+        />
       </Suspense>
     </div>
   );
