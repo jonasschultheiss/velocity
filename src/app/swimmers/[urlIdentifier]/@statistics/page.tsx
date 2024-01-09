@@ -1,11 +1,12 @@
-import { Suspense, type ReactElement } from 'react';
+import { type ReactElement } from 'react';
 import { Typography } from '@/components/typography';
-import { SwimmerGraph } from '@/components/visualisation/swimmer-graph';
 import type { SwimmerPossibilities } from '@/lib/fetch-swimmer-options';
 import { fetchPossibleOptions } from '@/lib/fetch-swimmer-options';
 import { urlIdentifierToName } from '@/lib/utils';
 import type { SwimmerResponse } from '@/lib/fetch-swimmer-data';
 import { fetchSwimmerData } from '@/lib/fetch-swimmer-data';
+import { InteractiveGraph } from '@/components/visualisation/interactive-graph';
+import { SwimmerGraphParameters } from '@/components/visualisation/swimmer-graph';
 import type { DefinedSearchParams } from '../types/search-params.interface';
 
 export interface SwimmerStatisticsPageProperties {
@@ -36,12 +37,11 @@ export default async function Page({
       <Typography component="p" variant="muted">
         Change how you see data
       </Typography>
-      <Suspense fallback={<div>Loading...</div>}>
-        <SwimmerGraph
-          data={swimmerResponse}
-          possibleOptions={possibleOptions}
-        />
-      </Suspense>
+      <SwimmerGraphParameters
+        possibleOptions={possibleOptions}
+        // preamble="amk"
+      />
+      <InteractiveGraph data={swimmerResponse} />
     </div>
   );
 }

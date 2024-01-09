@@ -15,7 +15,7 @@ import { NavigationItems } from './navigation-items';
 
 const navigation: NavigationRoute[] = [
   { name: 'Swimmers', href: '/swimmers' },
-  { name: 'Comparison', href: '#' },
+  { name: 'Comparison', href: '/comparison' },
   { name: 'About', href: '#' },
 ];
 
