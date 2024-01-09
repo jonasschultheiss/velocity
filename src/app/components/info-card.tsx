@@ -10,14 +10,22 @@ const units = {
 };
 
 export interface InfoCardProperties {
-  data: string;
+  value?: string;
   unit: keyof typeof units;
 }
 
-export function InfoCard(properties: Readonly<InfoCardProperties>): ReactNode {
-  const { data, unit } = properties;
-
+export function InfoCard(properties: InfoCardProperties): ReactNode {
+  const { value, unit } = properties;
   const Icon = units[unit];
+  let displayedValue = '';
+
+  if (!value) {
+    displayedValue = 'N/A';
+  } else if (unit === 'ans') {
+    displayedValue = new Date(value).toLocaleDateString('de-CH');
+  } else {
+    displayedValue = `${value} ${unit}`;
+  }
 
   return (
     <Card>
@@ -28,8 +36,7 @@ export function InfoCard(properties: Readonly<InfoCardProperties>): ReactNode {
       >
         <Icon className="relative z-10 w-10 h-10 mb-2" />
         <Typography component="span" variant="large">
-          {unit === 'ans' ? new Date(data).toLocaleDateString('de-CH') : data}{' '}
-          {unit === 'ans' ? '' : unit}
+          {displayedValue}
         </Typography>
       </Typography>
     </Card>

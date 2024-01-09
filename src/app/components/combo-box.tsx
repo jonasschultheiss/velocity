@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 interface Option {
   value: string;
   label: string;
+  disabled: boolean;
   onClick: () => void;
 }
 
@@ -57,6 +58,11 @@ export function ComboBox({
           <CommandGroup>
             {options.map((option) => (
               <CommandItem
+                className={cn(
+                  option.value.includes('remove') &&
+                    'aria-selected:bg-destructive aria-selected:text-destructive-foreground',
+                )}
+                disabled={option.disabled}
                 key={option.value}
                 onSelect={() => {
                   option.onClick();

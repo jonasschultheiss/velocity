@@ -1,0 +1,1 @@
+ALTER TABLE "swimmers" ADD CONSTRAINT "swimmers_surname_lastname_unique" UNIQUE("surname","lastname");

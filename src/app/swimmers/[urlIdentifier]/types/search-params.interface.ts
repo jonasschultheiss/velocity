@@ -1,9 +1,6 @@
-import type {
-  TechniqueDictionary,
-  TrackDictionary,
-} from '@/components/visualisation/swimmer-graph';
+import type { TechniqueDictionary, TrackDictionary } from '@/lib/utils';
 
-export interface SearchParams {
+export interface DefinedSearchParams extends Record<string, string> {
   track: keyof typeof TrackDictionary;
   technique: keyof typeof TechniqueDictionary;
 }

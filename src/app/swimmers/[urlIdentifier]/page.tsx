@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { and, ilike } from 'drizzle-orm';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { ReactElement } from 'react';
@@ -13,24 +13,27 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { SwimmerGraph } from '@/components/visualisation/swimmer-graph';
-import { fetchSwimmerData } from '@/lib/fetch-swimmer-data';
 import { db } from 'src/db';
 import { SwimmerTable } from 'src/db/schema';
-import type { SearchParams } from './types/search-params.interface';
+import { urlIdentifierToName } from '@/lib/utils';
+import type { DefinedSearchParams } from './types/search-params.interface';
 
 export interface SwimmerPageProperties {
-  params: { id: string };
-  searchParams: SearchParams;
+  params: { urlIdentifier: string };
+  searchParams: DefinedSearchParams;
 }
 
 export default async function Page({
-  params,
-  searchParams,
+  params: { urlIdentifier },
 }: Readonly<SwimmerPageProperties>): Promise<ReactElement> {
+  const name = urlIdentifierToName(urlIdentifier);
   const result = await db.query.SwimmerTable.findFirst({
-    where: eq(SwimmerTable.id, Number(params.id)),
+    where: and(
+      ilike(SwimmerTable.surname, name.surname),
+      ilike(SwimmerTable.lastname, name.lastname),
+    ),
   });
+
   if (!result) {
     notFound();
   }
@@ -45,39 +48,34 @@ export default async function Page({
     bio,
     ...socials
   } = result;
-  const swimmerResponse = await fetchSwimmerData(
-    searchParams,
-    surname,
-    lastname,
-  );
 
   return (
-    <main className="flex flex-col mt-16 gap-y-4">
+    <>
       <section className="w-full mb-4 text-balance">
         <Typography component="h2" variant="lead">
           {club}
         </Typography>
         <Typography component="h1" variant="h1">
-          {result.surname} {result.lastname}
+          {surname} {lastname}
         </Typography>
       </section>
 
-      {params.id === '1' && (
+      {urlIdentifier === 'cameron_mcevoy' && (
         <div className="w-full max-w-md">
           <AspectRatio ratio={16 / 9}>
             <Image
-              alt={`Image of the swimmer ${result.surname} ${result.lastname}`}
-              className="object-cover object-top rounded"
+              alt={`Image of the swimmer ${surname} ${lastname}`}
+              className="object-cover object-top rounded-lg"
               fill
-              src={`/swimmers/${params.id}.jpeg`}
+              src={`/swimmers/${urlIdentifier}.jpeg`}
             />
           </AspectRatio>
         </div>
       )}
       <div className="grid grid-cols-3 gap-4">
-        <InfoCard data={`${height && 'Not available'}`} unit="cm" />
-        <InfoCard data={`${weight && 'Not available'}`} unit="kg" />
-        <InfoCard data={`${birthdate && 'Not available'}`} unit="ans" />
+        <InfoCard unit="cm" value={height?.toString()} />
+        <InfoCard unit="kg" value={weight?.toString()} />
+        <InfoCard unit="ans" value={birthdate?.toISOString()} />
         <Card className="col-span-3">
           <CardHeader>
             <CardTitle>Biography</CardTitle>
@@ -97,7 +95,6 @@ export default async function Page({
         </Card>
         <SocialCard socials={socials} />
       </div>
-      <SwimmerGraph id={params.id} swimmerResponse={swimmerResponse} />
-    </main>
+    </>
   );
 }
