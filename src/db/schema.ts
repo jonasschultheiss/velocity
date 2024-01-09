@@ -1,23 +1,64 @@
-import { InferSelectModel } from 'drizzle-orm';
-import { pgTable, pgTableCreator, serial, smallint, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
+import type { SQL, InferSelectModel } from 'drizzle-orm';
+import {
+  pgTable,
+  pgTableCreator,
+  primaryKey,
+  smallint,
+  timestamp,
+  unique,
+  varchar,
+} from 'drizzle-orm/pg-core';
+import { NAME_SPLIT } from '@/lib/utils';
 import { env } from '../env.mjs';
 
-export const psqlTable = pgTableCreator((name) => `${env.DRIZZLE_TABLE_PREAMBLE}_${name}`);
+export const psqlTable = pgTableCreator(
+  (name) => `${env.DRIZZLE_TABLE_PREAMBLE}_${name}`,
+);
 
-export const SwimmerTable = pgTable('swimmers', {
-  id: serial('id').primaryKey(),
-  surname: varchar('surname', { length: 256 }).notNull(),
-  lastname: varchar('lastname', { length: 256 }).notNull(),
-  club: varchar('club', { length: 256 }),
-  weight: smallint('weight'),
-  height: smallint('height'),
-  birthdate: timestamp('birthdate', { precision: 6, withTimezone: false }),
-  bio: varchar('bio', { length: 1024 }),
-  instagram: varchar('instagram', { length: 256 }),
-  tiktok: varchar('tiktok', { length: 256 }),
-  youtube: varchar('youtube', { length: 256 }),
-  twitter: varchar('twitter', { length: 256 }),
-});
+const defaultVarcharLength = 256;
+
+export const SwimmerTable = pgTable(
+  'swimmers',
+  {
+    surname: varchar('surname', { length: defaultVarcharLength }).notNull(),
+    lastname: varchar('lastname', { length: defaultVarcharLength }).notNull(),
+    club: varchar('club', { length: defaultVarcharLength }),
+    weight: smallint('weight'),
+    height: smallint('height'),
+    birthdate: timestamp('birthdate', { precision: 6, withTimezone: false }),
+    bio: varchar('bio', { length: defaultVarcharLength * 4 }),
+    instagram: varchar('instagram', { length: defaultVarcharLength }),
+    tiktok: varchar('tiktok', { length: defaultVarcharLength }),
+    youtube: varchar('youtube', { length: defaultVarcharLength }),
+    twitter: varchar('twitter', { length: defaultVarcharLength }),
+  },
+  (t) => ({
+    uniqueNameCombination: unique().on(t.surname, t.lastname),
+    pk: primaryKey({ name: 'identifier', columns: [t.surname, t.lastname] }),
+  }),
+);
 
 export type Swimmer = InferSelectModel<typeof SwimmerTable>;
-export type SwimmerName = Pick<InferSelectModel<typeof SwimmerTable>, 'surname' | 'lastname'>;
+export type SwimmerName = Pick<
+  InferSelectModel<typeof SwimmerTable>,
+  'surname' | 'lastname'
+>;
+
+export function withURLIdentifier(): Record<string, SQL.Aliased<string>> {
+  return {
+    urlIdentifier:
+      sql<string>`lower(${SwimmerTable.surname}) || ${NAME_SPLIT} || lower(${SwimmerTable.lastname})`.as(
+        'urlIdentifier',
+      ),
+  };
+}
+
+export function withFullName(): Record<string, SQL.Aliased<string>> {
+  return {
+    fullName:
+      sql<string>`${SwimmerTable.surname} || ' ' || ${SwimmerTable.lastname}`.as(
+        'urlIdentifier',
+      ),
+  };
+}

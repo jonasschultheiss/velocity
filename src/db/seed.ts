@@ -1,25 +1,24 @@
 import { sql } from '@vercel/postgres';
 import 'dotenv/config';
+import type { Swimmer } from './schema';
+import { SwimmerTable } from './schema';
 import { db } from '.';
-import { Swimmer, SwimmerTable } from './schema';
 
 const seededSwimmers: Swimmer[] = [
   {
-    id: 1,
     surname: 'Cameron',
     lastname: 'Mcevoy',
-    club: null,
-    weight: null,
-    height: null,
-    birthdate: null,
-    bio: null,
-    instagram: null,
-    tiktok: null,
+    club: 'Somerville',
+    weight: 75,
+    height: 185,
+    birthdate: new Date('1994-05-12'),
+    bio: 'An accomplished swimmer has consistently demonstrated dedication and skill throughout his career. His impressive achievements in the pool, including numerous national and international accolades, highlight a commitment to excellence in the sport. The disciplined training regimen and sportsmanship exhibited by this individual serve as positive examples for aspiring athletes. As he continues to contribute to the swimming community, his impact on the sport remains significant, fostering admiration for his accomplishments and dedication to the pursuit of excellence. In evaluating contributions, it is important to recognize the influence on the broader swimming landscape and the inspiration provided to fellow athletes.',
+    instagram: 'https://www.instagram.com/cam_mcevoy/',
+    tiktok: 'https://www.tiktok.com/@cammcevoy',
     youtube: null,
     twitter: null,
   },
   {
-    id: 2,
     surname: 'Kathleen',
     lastname: 'Ledecky',
     club: null,
@@ -33,7 +32,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 3,
     surname: 'Kaylee',
     lastname: 'Mckeown',
     club: null,
@@ -47,7 +45,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 4,
     surname: 'Jing',
     lastname: 'Zhao',
     club: null,
@@ -61,7 +58,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 5,
     surname: 'Hunter',
     lastname: 'Armstrong',
     club: null,
@@ -75,7 +71,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 6,
     surname: 'Thomas',
     lastname: 'Ceccon',
     club: null,
@@ -89,7 +84,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 7,
     surname: 'Kyle',
     lastname: 'Chalmers',
     club: null,
@@ -103,7 +97,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 8,
     surname: 'Caeleb',
     lastname: 'Dressel',
     club: null,
@@ -117,7 +110,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 9,
     surname: 'Andrii',
     lastname: 'Govorov',
     club: null,
@@ -131,7 +123,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 10,
     surname: 'Hamza',
     lastname: 'Niyazi',
     club: null,
@@ -145,7 +136,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 11,
     surname: 'Tomoru',
     lastname: 'Honda',
     club: null,
@@ -159,7 +149,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 12,
     surname: 'Kliment',
     lastname: 'Kolesnikov',
     club: null,
@@ -173,7 +162,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 13,
     surname: 'Mitchell',
     lastname: 'Larkin',
     club: null,
@@ -187,7 +175,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 14,
     surname: 'Leon',
     lastname: 'Marchand',
     club: null,
@@ -201,7 +188,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 15,
     surname: 'Kristof',
     lastname: 'Milak',
     club: null,
@@ -215,7 +201,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 16,
     surname: 'Ryan F',
     lastname: 'Murphy',
     club: null,
@@ -229,7 +214,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 17,
     surname: 'Adam',
     lastname: 'Peaty',
     club: null,
@@ -243,7 +227,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 18,
     surname: 'David',
     lastname: 'Popovici',
     club: null,
@@ -257,7 +240,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 19,
     surname: 'Kirill',
     lastname: 'Prigoda',
     club: null,
@@ -271,7 +253,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 20,
     surname: 'Haiyang',
     lastname: 'Qin',
     club: null,
@@ -285,7 +266,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 21,
     surname: 'Emre',
     lastname: 'Sakci',
     club: null,
@@ -299,7 +279,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 22,
     surname: 'Nicholas',
     lastname: 'Santos',
     club: null,
@@ -313,7 +292,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 23,
     surname: 'Daiya',
     lastname: 'Seto',
     club: null,
@@ -327,7 +305,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 24,
     surname: 'Ilya',
     lastname: 'Shymanovich',
     club: null,
@@ -341,7 +318,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 25,
     surname: 'Coleman M',
     lastname: 'Stewart',
     club: null,
@@ -355,7 +331,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 26,
     surname: 'Zac',
     lastname: 'Stubblety-cook',
     club: null,
@@ -369,7 +344,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 27,
     surname: 'Szebasztian',
     lastname: 'Szabo',
     club: null,
@@ -383,7 +357,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 28,
     surname: 'Florian',
     lastname: 'Wellbrock',
     club: null,
@@ -397,7 +370,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 29,
     surname: 'Diesel',
     lastname: 'Willier',
     club: null,
@@ -411,7 +383,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 30,
     surname: 'Minna',
     lastname: 'Atherton',
     club: null,
@@ -425,7 +396,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 31,
     surname: 'Mireia BELMONTE',
     lastname: 'Garcia',
     club: null,
@@ -439,7 +409,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 32,
     surname: 'Cate',
     lastname: 'Campbell',
     club: null,
@@ -453,7 +422,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 33,
     surname: 'Evgeniia',
     lastname: 'Chikunova',
     club: null,
@@ -467,7 +435,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 34,
     surname: 'Katherine C',
     lastname: 'Douglass',
     club: null,
@@ -481,7 +448,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 35,
     surname: 'Siobhan',
     lastname: 'Haughey',
     club: null,
@@ -495,7 +461,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 36,
     surname: 'Torri',
     lastname: 'Huske',
     club: null,
@@ -509,7 +474,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 37,
     surname: 'Lillia C',
     lastname: 'King',
     club: null,
@@ -523,7 +487,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 38,
     surname: 'Bingjie',
     lastname: 'Li',
     club: null,
@@ -537,7 +500,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 39,
     surname: 'Margaret',
     lastname: 'Macneil',
     club: null,
@@ -551,7 +513,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 40,
     surname: 'Summer',
     lastname: 'Mcintosh',
     club: null,
@@ -565,7 +526,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 41,
     surname: 'Ruta',
     lastname: 'Meilutyte',
     club: null,
@@ -579,7 +539,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 42,
     surname: 'Mafalda Rocha',
     lastname: 'Mendes',
     club: null,
@@ -593,7 +552,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 43,
     surname: 'Mollie',
     lastname: "O'Callaghan",
     club: null,
@@ -607,7 +565,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 44,
     surname: 'Benedetta',
     lastname: 'Pilato',
     club: null,
@@ -621,7 +578,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 45,
     surname: 'Amandine',
     lastname: 'Pittet',
     club: null,
@@ -635,7 +591,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 46,
     surname: 'Tatjana R',
     lastname: 'Schoenmaker',
     club: null,
@@ -649,7 +604,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 47,
     surname: 'Sarah',
     lastname: 'Sjostrom',
     club: null,
@@ -663,7 +617,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 48,
     surname: 'Regan E',
     lastname: 'Smith',
     club: null,
@@ -677,7 +630,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 49,
     surname: 'Ariarne',
     lastname: 'Titmus',
     club: null,
@@ -691,7 +643,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 50,
     surname: 'Sarah',
     lastname: 'Wellbrock',
     club: null,
@@ -705,7 +656,6 @@ const seededSwimmers: Swimmer[] = [
     twitter: null,
   },
   {
-    id: 51,
     surname: 'Yufei',
     lastname: 'Zhang',
     club: null,
@@ -718,14 +668,237 @@ const seededSwimmers: Swimmer[] = [
     youtube: null,
     twitter: null,
   },
+  {
+    surname: 'Cesar',
+    lastname: 'Cielo',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Lin',
+    lastname: 'Zhang',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Yang',
+    lastname: 'Sun',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Lukas',
+    lastname: 'Breiter',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Lennon',
+    lastname: 'Schmied',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Hannah',
+    lastname: 'Breiter',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Julia',
+    lastname: 'Hinnerks',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Sarina',
+    lastname: 'Liesch',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Fiona',
+    lastname: 'Liesch',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Céline',
+    lastname: 'Müller',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Talia',
+    lastname: 'Jordan',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Léna',
+    lastname: 'Ecoffey',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Yannick',
+    lastname: 'Knab',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Severin',
+    lastname: 'Oberli',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Kilian',
+    lastname: 'Roppel',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Giordana',
+    lastname: 'Graf',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
+  {
+    surname: 'Xenia',
+    lastname: 'Blumin',
+    club: null,
+    weight: null,
+    height: null,
+    birthdate: null,
+    bio: null,
+    instagram: null,
+    tiktok: null,
+    youtube: null,
+    twitter: null,
+  },
 ];
 
-async function seed() {
-  const swimmers = await db
+async function seed(): Promise<void> {
+  await db
     .insert(SwimmerTable)
     .values(seededSwimmers)
-    .onConflictDoNothing({ target: SwimmerTable.id });
+    .onConflictDoNothing({
+      target: [SwimmerTable.surname, SwimmerTable.lastname],
+    });
   await sql.end();
 }
 
-seed();
+void seed();

@@ -7,6 +7,7 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { StopCircle } from 'lucide-react';
+import type { ReactElement } from 'react';
 import { useEffect, useState } from 'react';
 import {
   CommandDialog,
@@ -19,19 +20,21 @@ import {
   CommandShortcut,
 } from './ui/command';
 
-export function CommandMenu() {
+export function CommandMenu(): ReactElement {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const down = (e: KeyboardEvent) => {
+    const down = (e: KeyboardEvent): void => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setOpen((open) => !open);
+        setOpen((oldState) => !oldState);
       }
     };
 
     document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
+    return () => {
+      document.removeEventListener('keydown', down);
+    };
   }, []);
 
   return (
@@ -42,38 +45,38 @@ export function CommandMenu() {
           <span className="text-xs">⌘</span>J
         </kbd>
       </p>
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog onOpenChange={setOpen} open={open}>
         <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Suggestions">
             <CommandItem>
-              <CalendarDaysIcon className="mr-2 h-4 w-4" />
+              <CalendarDaysIcon className="w-4 h-4 mr-2" />
               <span>Calendar</span>
             </CommandItem>
             <CommandItem>
-              <FaceSmileIcon className="mr-2 h-4 w-4" />
+              <FaceSmileIcon className="w-4 h-4 mr-2" />
               <span>Search Emoji</span>
             </CommandItem>
             <CommandItem>
-              <CalculatorIcon className="mr-2 h-4 w-4" />
+              <CalculatorIcon className="w-4 h-4 mr-2" />
               <span>Calculator</span>
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="Settings">
             <CommandItem>
-              <UserCircleIcon className="mr-2 h-4 w-4" />
+              <UserCircleIcon className="w-4 h-4 mr-2" />
               <span>Profile</span>
               <CommandShortcut>⌘P</CommandShortcut>
             </CommandItem>
             <CommandItem>
-              <CreditCardIcon className="mr-2 h-4 w-4" />
+              <CreditCardIcon className="w-4 h-4 mr-2" />
               <span>Billing</span>
               <CommandShortcut>⌘B</CommandShortcut>
             </CommandItem>
             <CommandItem>
-              <StopCircle className="mr-2 h-4 w-4" />
+              <StopCircle className="w-4 h-4 mr-2" />
               <span>Settings</span>
               <CommandShortcut>⌘S</CommandShortcut>
             </CommandItem>

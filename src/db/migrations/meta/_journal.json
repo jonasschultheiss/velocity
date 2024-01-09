@@ -8,6 +8,20 @@
       "when": 1702636249878,
       "tag": "0000_wealthy_captain_flint",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1704646958739,
+      "tag": "0001_slow_zemo",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1704649039649,
+      "tag": "0002_legal_warhawk",
+      "breakpoints": true
     }
   ]
 }
