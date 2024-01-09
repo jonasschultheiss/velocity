@@ -36,7 +36,7 @@ export function Graph({
     yAccessor: (d: DataPoint | null) => (d ? d.y : null),
   };
 
-  const distances: number[] = [0, 50, 100, 200, 400, 1500];
+  const distances: number[] = [0, 50, 100, 200, 400, 1500, 2000];
 
   return (
     <XYChart
