@@ -1,4 +1,3 @@
-import { and, ilike } from 'drizzle-orm';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { ReactElement } from 'react';
@@ -13,9 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { db } from 'src/db';
-import { SwimmerTable } from 'src/db/schema';
-import { urlIdentifierToName } from '@/lib/utils';
+import { getUserByUrlIdentifier } from '@/lib/get-user-by-url-identifier';
 import type { DefinedSearchParams } from './types/search-params.interface';
 
 export interface SwimmerPageProperties {
@@ -26,13 +23,7 @@ export interface SwimmerPageProperties {
 export default async function Page({
   params: { urlIdentifier },
 }: Readonly<SwimmerPageProperties>): Promise<ReactElement> {
-  const name = urlIdentifierToName(urlIdentifier);
-  const result = await db.query.SwimmerTable.findFirst({
-    where: and(
-      ilike(SwimmerTable.surname, name.surname),
-      ilike(SwimmerTable.lastname, name.lastname),
-    ),
-  });
+  const result = await getUserByUrlIdentifier(urlIdentifier);
 
   if (!result) {
     notFound();

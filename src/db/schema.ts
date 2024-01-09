@@ -40,6 +40,23 @@ export const SwimmerTable = pgTable(
 );
 
 export type Swimmer = InferSelectModel<typeof SwimmerTable>;
+
+export interface SwimmerWithExtras extends Swimmer {
+  surname: string;
+  lastname: string;
+  club: string | null;
+  weight: number | null;
+  height: number | null;
+  birthdate: Date | null;
+  bio: string | null;
+  instagram: string | null;
+  tiktok: string | null;
+  youtube: string | null;
+  twitter: string | null;
+  urlIdentifier: string;
+  fullName: string;
+}
+
 export type SwimmerName = Pick<
   InferSelectModel<typeof SwimmerTable>,
   'surname' | 'lastname'
@@ -58,7 +75,7 @@ export function withFullName(): Record<string, SQL.Aliased<string>> {
   return {
     fullName:
       sql<string>`${SwimmerTable.surname} || ' ' || ${SwimmerTable.lastname}`.as(
-        'urlIdentifier',
+        'fullName',
       ),
   };
 }
