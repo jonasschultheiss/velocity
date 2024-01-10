@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
 import type { Swimmer } from 'src/db/schema';
 import type { SwimmerDataSet } from '@/components/visualisation/graph';
-import { getUserByUrlIdentifier } from './get-user-by-url-identifier';
+import { getUserByUrlIdentifierViaApi } from './get-user-by-url-identifier';
 import type { SwimmerPossibilities } from './fetch-swimmer-options';
 import { fetchPossibleOptions } from './fetch-swimmer-options';
 import { fetchSwimmerData } from './fetch-swimmer-data';
@@ -58,7 +58,7 @@ export function useDynamicSwimmers(
             let possibleOptions;
 
             if (param) {
-              swimmer = await getUserByUrlIdentifier(param);
+              swimmer = await getUserByUrlIdentifierViaApi(param);
               if (swimmer) {
                 possibleOptions = await fetchPossibleOptions({
                   surname: swimmer.surname,
