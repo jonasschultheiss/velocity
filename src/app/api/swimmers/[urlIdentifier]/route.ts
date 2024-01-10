@@ -1,18 +1,9 @@
-import { and, ilike } from 'drizzle-orm';
-import { urlIdentifierToName } from '@/lib/utils';
-import { db } from 'src/db';
-import { SwimmerTable } from 'src/db/schema';
+import { getUserByUrlIdentifier } from '@/lib/get-user-by-url-identifier';
 
 export async function GET(
   request: Request,
   { params }: { params: { urlIdentifier: string } },
 ): Promise<Response> {
-  const name = urlIdentifierToName(params.urlIdentifier);
-  const swimmer = await db.query.SwimmerTable.findFirst({
-    where: and(
-      ilike(SwimmerTable.surname, name.surname),
-      ilike(SwimmerTable.lastname, name.lastname),
-    ),
-  });
+  const swimmer = await getUserByUrlIdentifier(params.urlIdentifier);
   return Response.json({ swimmer });
 }
