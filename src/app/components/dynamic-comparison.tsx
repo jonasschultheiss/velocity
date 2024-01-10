@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion -- ts doenst get type safety in this case*/
 'use client';
 
 /* eslint-disable react/no-array-index-key -- scusa*/
@@ -10,7 +11,6 @@ import { SwimmerComparisonCard } from '@/components/swimmer-comparison-card';
 import type { Swimmer } from 'src/db/schema';
 import type { Slots } from '@/lib/utils';
 import { getInitialSlots } from '@/lib/utils';
-import type { SwimmerGraphDetails } from '@/lib/use-dynamic-swimmers';
 import { useDynamicSwimmers } from '@/lib/use-dynamic-swimmers';
 import { Button } from '@/components/ui/button';
 
@@ -24,20 +24,30 @@ export function DynamicComparison({
   allSwimmers,
 }: DynamicComparisonProperties): ReactElement {
   const [slots, setSlots] = useState<Slots>(getInitialSlots());
+
   const searchParams = useSearchParams();
   const { comparedSwimmers, datasets } = useDynamicSwimmers(
     searchParams,
     slots.used,
   );
 
-  let selectedCount = 0;
-  for (const key of searchParams.keys()) {
-    if (key.includes('swimmer')) {
-      selectedCount++;
-    }
+  function canBeAdded(): boolean {
+    return slots.used.length >= 2 && slots.used.length <= 7;
   }
 
-  console.log(comparedSwimmers.length);
+  function addSlot(): void {
+    if (canBeAdded()) {
+      setSlots(({ used, free }) => {
+        const freeInterim = [...free];
+        const usedInterim = [...used];
+        usedInterim.push(freeInterim.pop()!);
+        return {
+          free: [...freeInterim],
+          used: [...usedInterim],
+        };
+      });
+    }
+  }
 
   return (
     <>
@@ -60,22 +70,18 @@ export function DynamicComparison({
           ) : null}
         </div>
       ))}
-      {selectedCount >= 2 && selectedCount <= 7 ? (
-        <Button
-          className="my-4"
-          // onClick={(e) => {
-          //   handleSwimmerAddition(e);
-          // }}
-          type="button"
-        >
-          <UserPlusIcon className="w-4 h-4 mr-2" /> Add another swimmer
-        </Button>
-      ) : null}
+
+      <Button
+        className="my-4"
+        disabled={!canBeAdded()}
+        onClick={() => {
+          addSlot();
+        }}
+        type="button"
+      >
+        <UserPlusIcon className="w-4 h-4 mr-2" /> Add another swimmer
+      </Button>
       <InteractiveGraph data={datasets} />
     </>
   );
 }
-
-// console.log(swimmerGraphDetails.length === selectedCount);
-// console.log(swimmerGraphDetails.length);
-// console.log(selectedCount);

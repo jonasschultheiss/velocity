@@ -3,6 +3,7 @@
 import type { ReactElement } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { TrashIcon } from '@heroicons/react/24/outline';
 import type { Swimmer, SwimmerWithExtras } from 'src/db/schema';
 import type { SwimmerPossibilities } from '@/lib/fetch-swimmer-options';
 import {
@@ -15,6 +16,7 @@ import {
 import { AspectRatio } from './ui/aspect-ratio';
 import { ComboBox } from './combo-box';
 import { SwimmerGraphParameters } from './visualisation/swimmer-graph';
+import { Button } from './ui/button';
 
 export interface SwimmerComparisonCardProperties {
   swimmers: SwimmerWithExtras[];
@@ -48,6 +50,11 @@ export function SwimmerComparisonCard({
     replaceParams();
   }
 
+  function removeSelf(): void {
+    params.delete(paramKey);
+    replaceParams();
+  }
+
   return (
     <Card>
       {selectedSwimmer ? (
@@ -66,29 +73,42 @@ export function SwimmerComparisonCard({
         </CardHeader>
       ) : null}
       <CardContent className={!selectedSwimmer ? 'pt-6' : undefined}>
-        <ComboBox
-          initialValue={
-            selectedSwimmer
-              ? `${selectedSwimmer.surname} ${selectedSwimmer.lastname}`
-              : undefined
-          }
-          optionType="Swimmer"
-          options={swimmers
-            .map((swimmer) => ({
-              label: swimmer.fullName,
-              value: swimmer.urlIdentifier,
-              onClick: () => {
-                setSelectedSwimmer(swimmer.urlIdentifier);
-              },
-            }))
-            .concat({
-              label: 'Remove selection',
-              value: 'remove',
-              onClick: () => {
-                setSelectedSwimmer();
-              },
-            })}
-        />
+        <div className="flex items-center gap-x-2">
+          <ComboBox
+            initialValue={
+              selectedSwimmer
+                ? `${selectedSwimmer.surname} ${selectedSwimmer.lastname}`
+                : undefined
+            }
+            optionType="Swimmer"
+            options={swimmers
+              .map((swimmer) => ({
+                label: swimmer.fullName,
+                value: swimmer.urlIdentifier,
+                onClick: () => {
+                  setSelectedSwimmer(swimmer.urlIdentifier);
+                },
+              }))
+              .concat({
+                label: 'Remove selection',
+                value: 'remove',
+                onClick: () => {
+                  setSelectedSwimmer();
+                },
+              })}
+          />
+          {selectedSwimmer ? (
+            <Button
+              onClick={() => {
+                removeSelf();
+              }}
+              size="icon"
+              variant="destructive"
+            >
+              <TrashIcon className="w-4 h-4" />
+            </Button>
+          ) : null}
+        </div>
       </CardContent>
       {selectedSwimmer && possibleOptions ? (
         <CardFooter>

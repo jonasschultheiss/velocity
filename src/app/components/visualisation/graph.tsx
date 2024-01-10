@@ -85,6 +85,7 @@ export function Graph({
             data={regressionLine.data}
             dataKey={regressionLine.name}
             enableEvents={false}
+            key={regressionLine.name}
             stroke={regressionLine.color}
             {...accessorsNullable}
           />
@@ -93,6 +94,7 @@ export function Graph({
             data={dataPoints.data}
             dataKey={dataPoints.name}
             enableEvents
+            key={dataPoints.name}
             {...accessorsNullable}
           />
         </>
