@@ -4,6 +4,7 @@ import type { ReactElement } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { Swimmer, SwimmerWithExtras } from 'src/db/schema';
+import type { SwimmerPossibilities } from '@/lib/fetch-swimmer-options';
 import {
   Card,
   CardContent,
@@ -17,13 +18,15 @@ import { SwimmerGraphParameters } from './visualisation/swimmer-graph';
 
 export interface SwimmerComparisonCardProperties {
   swimmers: SwimmerWithExtras[];
-  selectedSwimmer: Swimmer | undefined;
+  selectedSwimmer?: Swimmer;
+  possibleOptions?: SwimmerPossibilities;
   preamble: string;
 }
 
 export function SwimmerComparisonCard({
   swimmers,
   selectedSwimmer,
+  possibleOptions,
   preamble = '',
 }: SwimmerComparisonCardProperties): ReactElement {
   const params = new URLSearchParams(useSearchParams());
@@ -87,21 +90,11 @@ export function SwimmerComparisonCard({
             })}
         />
       </CardContent>
-      {selectedSwimmer ? (
+      {selectedSwimmer && possibleOptions ? (
         <CardFooter>
           <SwimmerGraphParameters
-            possibleOptions={{
-              'S-50': true,
-              'R-50': true,
-              'B-50': true,
-              'F-50': true,
-              'L-50': false,
-              'S-25': true,
-              'R-25': true,
-              'B-25': false,
-              'F-25': true,
-              'L-25': false,
-            }}
+            possibleOptions={possibleOptions}
+            preamble={preamble}
           />
         </CardFooter>
       ) : null}

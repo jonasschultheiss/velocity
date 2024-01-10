@@ -11,21 +11,32 @@ import {
 import type { ReactElement } from 'react';
 import type { DataPoint } from '../../lib/data-point.interface';
 
-export function Graph({
-  dataPoints,
-  regressionLine,
-  height,
-  tooltipEnabled,
-  domainUpper,
-  domainLower,
-}: {
-  dataPoints: DataPoint[];
-  regressionLine: DataPoint[];
+export interface Dataset {
+  name: string;
+  color: string;
+  data: DataPoint[];
+}
+
+export interface SwimmerDataSet {
+  regressionLine: Dataset;
+  dataPoints: Dataset;
+}
+
+export interface GraphProperties {
+  data: SwimmerDataSet[];
   height: number;
   tooltipEnabled: boolean;
   domainUpper: number;
   domainLower: number;
-}): ReactElement {
+}
+
+export function Graph({
+  data,
+  height,
+  tooltipEnabled,
+  domainUpper,
+  domainLower,
+}: GraphProperties): ReactElement {
   const tickLabelOffset = 15;
   const accessors = {
     xAccessor: (d: DataPoint) => d.x,
@@ -68,20 +79,25 @@ export function Graph({
         orientation="left"
         tickLabelProps={() => ({ dx: -10 })}
       />
-      <AnimatedLineSeries
-        data={regressionLine}
-        dataKey="regressionLine"
-        enableEvents={false}
-        stroke="#ef4444"
-        {...accessorsNullable}
-      />
-      <GlyphSeries
-        colorAccessor={() => '#3b82f6'}
-        data={dataPoints}
-        dataKey="dataPoint"
-        enableEvents
-        {...accessorsNullable}
-      />
+      {data.map(({ regressionLine, dataPoints }) => (
+        <>
+          <AnimatedLineSeries
+            data={regressionLine.data}
+            dataKey={regressionLine.name}
+            enableEvents={false}
+            stroke={regressionLine.color}
+            {...accessorsNullable}
+          />
+          <GlyphSeries
+            colorAccessor={() => dataPoints.color}
+            data={dataPoints.data}
+            dataKey={dataPoints.name}
+            enableEvents
+            {...accessorsNullable}
+          />
+        </>
+      ))}
+
       {tooltipEnabled ? (
         <Tooltip
           glyphStyle={{

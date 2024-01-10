@@ -3,10 +3,11 @@ import { Typography } from '@/components/typography';
 import type { SwimmerPossibilities } from '@/lib/fetch-swimmer-options';
 import { fetchPossibleOptions } from '@/lib/fetch-swimmer-options';
 import { urlIdentifierToName } from '@/lib/utils';
-import type { SwimmerResponse } from '@/lib/fetch-swimmer-data';
 import { fetchSwimmerData } from '@/lib/fetch-swimmer-data';
 import { InteractiveGraph } from '@/components/visualisation/interactive-graph';
 import { SwimmerGraphParameters } from '@/components/visualisation/swimmer-graph';
+import type { SwimmerDataSet } from '@/components/visualisation/graph';
+import { makeDataset } from '@/lib/make-dataset';
 import type { DefinedSearchParams } from '../types/search-params.interface';
 
 export interface SwimmerStatisticsPageProperties {
@@ -20,13 +21,27 @@ export default async function Page({
 }: SwimmerStatisticsPageProperties): Promise<ReactElement> {
   const fullName = urlIdentifierToName(urlIdentifier);
   const possibleOptions = await fetchPossibleOptions(fullName);
-  let swimmerResponse: SwimmerResponse | null = null;
+
+  const datasets: SwimmerDataSet[] = [];
   if (possibleOptions[`${technique}-${track}` as keyof SwimmerPossibilities]) {
-    swimmerResponse = await fetchSwimmerData(
+    const swimmerResponse = await fetchSwimmerData(
       { technique, track },
       fullName.surname,
       fullName.lastname,
     );
+
+    datasets.push({
+      regressionLine: makeDataset(
+        'regressionLine',
+        '#ef4444',
+        swimmerResponse.regressionLine,
+      ),
+      dataPoints: makeDataset(
+        'dataPoints',
+        '#3b82f6',
+        swimmerResponse.dataPoints,
+      ),
+    });
   }
 
   return (
@@ -37,11 +52,8 @@ export default async function Page({
       <Typography component="p" variant="muted">
         Change how you see data
       </Typography>
-      <SwimmerGraphParameters
-        possibleOptions={possibleOptions}
-        // preamble="amk"
-      />
-      <InteractiveGraph data={swimmerResponse} />
+      <SwimmerGraphParameters possibleOptions={possibleOptions} />
+      <InteractiveGraph data={datasets} />
     </div>
   );
 }
