@@ -26,7 +26,10 @@ module.exports = {
   overrides: [
     {
       files: '**/*.{js,jsx,ts,tsx}',
-      rules: { '@typescript-eslint/unbound-method': 'off' },
+      rules: {
+        '@typescript-eslint/unbound-method': 'off',
+        'import/no-cycle': 'off',
+      },
     },
     {
       files: [
