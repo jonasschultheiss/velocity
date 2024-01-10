@@ -1,8 +1,9 @@
 import type { TechniqueDictionary, TrackDictionary } from '@/lib/utils';
 
-export interface DefinedSearchParams extends Record<string, string> {
-  track: keyof typeof TrackDictionary;
-  technique: keyof typeof TechniqueDictionary;
+export interface DefinedSearchParams
+  extends Record<string, string | undefined> {
+  track?: keyof typeof TrackDictionary;
+  technique?: keyof typeof TechniqueDictionary;
 }
 
 export const DEFAULT_PARAMS = {

@@ -4,7 +4,6 @@ import ParentSize from '@visx/responsive/lib/components/ParentSize';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { ReactElement } from 'react';
 import { useState } from 'react';
-import type { SwimmerResponse } from '@/lib/fetch-swimmer-data';
 import { domainDefaults, getDomainValue } from '@/lib/utils';
 import { Typography } from '../typography';
 import { AspectRatio } from '../ui/aspect-ratio';
@@ -17,14 +16,13 @@ import {
 } from '../ui/collapsible';
 import { Label } from '../ui/label';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
-import { Separator } from '../ui/separator';
 import { Slider } from '../ui/slider';
 import { Switch } from '../ui/switch';
+import type { SwimmerDataSet } from './graph';
 import { Graph } from './graph';
-import { NoData } from './no-data';
 
 export interface InteractiveGraphProperties {
-  data: SwimmerResponse | null;
+  data: SwimmerDataSet[];
 }
 
 export function InteractiveGraph({
@@ -43,7 +41,6 @@ export function InteractiveGraph({
     >
       <div className="flex flex-col space-y-2">
         <CollapsibleContent className="flex flex-col gap-y-2">
-          <Separator className="my-4" />
           <div className="flex items-center space-x-2">
             <Switch
               checked={tooltipEnabled}
@@ -88,6 +85,7 @@ export function InteractiveGraph({
               value={domainLower}
             />
           </div>
+          <Label htmlFor="picture">Picture</Label>
         </CollapsibleContent>
       </div>
 
@@ -96,14 +94,14 @@ export function InteractiveGraph({
           {isOpen ? (
             <>
               <Typography component="span" variant="small">
-                Collapse
+                Collapse graph controls
               </Typography>
               <ChevronUp className="w-4 h-4 ml-2" />
             </>
           ) : (
             <>
               <Typography component="span" variant="small">
-                Expand
+                Expand graph controls
               </Typography>
               <ChevronDown className="w-4 h-4 ml-2" />
             </>
@@ -111,26 +109,20 @@ export function InteractiveGraph({
           <span className="sr-only">Toggle</span>
         </Button>
       </CollapsibleTrigger>
-      <Separator />
       <ScrollArea className="p-2 pt-0 ">
         <ScrollBar orientation="horizontal" />
         <AspectRatio ratio={16 / 9}>
-          {data ? (
-            <ParentSize className="h-full">
-              {({ height }) => (
-                <Graph
-                  dataPoints={data.dataPoints}
-                  domainLower={getDomainValue('lower', domainLower) / 100}
-                  domainUpper={getDomainValue('upper', domainUpper) / 100}
-                  height={height}
-                  regressionLine={data.regressionLine}
-                  tooltipEnabled={tooltipEnabled}
-                />
-              )}
-            </ParentSize>
-          ) : (
-            <NoData />
-          )}
+          <ParentSize className="h-full">
+            {({ height }) => (
+              <Graph
+                data={data}
+                domainLower={getDomainValue('lower', domainLower) / 100}
+                domainUpper={getDomainValue('upper', domainUpper) / 100}
+                height={height}
+                tooltipEnabled={tooltipEnabled}
+              />
+            )}
+          </ParentSize>
         </AspectRatio>
       </ScrollArea>
     </Collapsible>

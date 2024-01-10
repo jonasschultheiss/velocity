@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary -- time restriction*/
 'use client';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import * as React from 'react';
@@ -5,9 +6,9 @@ import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
-  CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from '@/components/ui/command';
 import {
   Popover,
@@ -19,8 +20,8 @@ import { cn } from '@/lib/utils';
 interface Option {
   value: string;
   label: string;
-  disabled: boolean;
-  onClick: () => void;
+  disabled?: boolean;
+  onClick?: () => void;
 }
 
 export interface CompoBoxProperties {
@@ -46,7 +47,9 @@ export function ComboBox({
           variant="outline"
         >
           {initialValue
-            ? options.find((option) => option.value === initialValue)?.label
+            ? typeof initialValue === 'string'
+              ? initialValue
+              : options.find((option) => option.value === initialValue)?.label
             : `Select ${optionType}...`}
           <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
         </Button>
@@ -54,8 +57,8 @@ export function ComboBox({
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput placeholder={`Search ${optionType}...`} />
-          <CommandEmpty>No framework found.</CommandEmpty>
-          <CommandGroup>
+          <CommandEmpty>No {optionType} found.</CommandEmpty>
+          <CommandList>
             {options.map((option) => (
               <CommandItem
                 className={cn(
@@ -65,8 +68,10 @@ export function ComboBox({
                 disabled={option.disabled}
                 key={option.value}
                 onSelect={() => {
-                  option.onClick();
-                  setOpen(false);
+                  if (option.onClick) {
+                    option.onClick();
+                    setOpen(false);
+                  }
                 }}
                 value={option.value}
               >
@@ -79,7 +84,7 @@ export function ComboBox({
                 {option.label}
               </CommandItem>
             ))}
-          </CommandGroup>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>

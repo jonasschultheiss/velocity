@@ -5,23 +5,25 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { ReactElement } from 'react';
 import { TechniqueDictionary, TrackDictionary } from '@/lib/utils';
 import type { SwimmerPossibilities } from '@/lib/fetch-swimmer-options';
-import type { SwimmerResponse } from '@/lib/fetch-swimmer-data';
 import { ComboBox } from '../combo-box';
 import { Typography } from '../typography';
-import { InteractiveGraph } from './interactive-graph';
 
-export interface SwimmerGraphProperties {
+export interface SwimmerGraphParametersProperties {
   possibleOptions: SwimmerPossibilities;
-  data: SwimmerResponse | null;
+  preamble?: string;
 }
 
-export function SwimmerGraph({
+export function SwimmerGraphParameters({
   possibleOptions,
-  data,
-}: SwimmerGraphProperties): ReactElement {
+  preamble = '',
+}: SwimmerGraphParametersProperties): ReactElement {
   const params = new URLSearchParams(useSearchParams());
   const pathname = usePathname();
   const { replace } = useRouter();
+  const parameters = {
+    technique: `${preamble}technique`,
+    track: `${preamble}track`,
+  };
 
   function replaceParams(): void {
     replace(`${pathname}?${params.toString()}`, { scroll: false });
@@ -29,9 +31,9 @@ export function SwimmerGraph({
 
   function setTechnique(technique?: keyof typeof TechniqueDictionary): void {
     if (technique) {
-      params.set('technique', technique);
+      params.set(parameters.technique, technique);
     } else {
-      params.delete('technique');
+      params.delete(parameters.technique);
     }
 
     replaceParams();
@@ -39,17 +41,17 @@ export function SwimmerGraph({
 
   function setTrack(track?: keyof typeof TrackDictionary): void {
     if (track) {
-      params.set('track', track);
+      params.set(parameters.track, track);
     } else {
-      params.delete('track');
+      params.delete(parameters.track);
     }
 
     replaceParams();
   }
 
   function shouldBeDisabled(type: 'technique' | 'track', el: string): boolean {
-    const technique = params.get('technique');
-    const track = params.get('track');
+    const technique = params.get(parameters.technique);
+    const track = params.get(parameters.track);
     if (
       !technique ||
       !track ||
@@ -90,7 +92,7 @@ export function SwimmerGraph({
 
       <ComboBox
         initialValue={Object.keys(TechniqueDictionary).find(
-          (el) => TechniqueDictionary[el] === params.get('technique'),
+          (el) => TechniqueDictionary[el] === params.get(parameters.technique),
         )}
         optionType="technique"
         options={Object.keys(TechniqueDictionary)
@@ -113,7 +115,7 @@ export function SwimmerGraph({
       />
       <ComboBox
         initialValue={Object.keys(TrackDictionary).find(
-          (el) => TrackDictionary[el] === params.get('track'),
+          (el) => TrackDictionary[el] === params.get(parameters.track),
         )}
         optionType="track"
         options={Object.keys(TrackDictionary)
@@ -134,8 +136,6 @@ export function SwimmerGraph({
             },
           })}
       />
-
-      <InteractiveGraph data={data} />
     </div>
   );
 }
