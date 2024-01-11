@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+/* eslint-disable @typescript-eslint/no-confusing-non-null-assertion */
 'use client';
 
 import ParentSize from '@visx/responsive/lib/components/ParentSize';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { ReactElement } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { domainDefaults, getDomainValue } from '@/lib/utils';
 import { Typography } from '../typography';
 import { AspectRatio } from '../ui/aspect-ratio';
@@ -18,11 +21,23 @@ import { Label } from '../ui/label';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 import { Slider } from '../ui/slider';
 import { Switch } from '../ui/switch';
+import { Input } from '../ui/input';
+import { ColorPicker } from '../color-picker';
 import type { SwimmerDataSet } from './graph';
 import { Graph } from './graph';
 
 export interface InteractiveGraphProperties {
   data: SwimmerDataSet[];
+}
+
+export interface KeyAndColor {
+  key: string;
+  colorCode: string;
+}
+
+export interface ColorPair {
+  regressionLine: KeyAndColor;
+  dataPoints: KeyAndColor;
 }
 
 export function InteractiveGraph({
@@ -32,6 +47,24 @@ export function InteractiveGraph({
   const [isOpen, setIsOpen] = useState(false);
   const [domainUpper, setDomainUpper] = useState([domainDefaults.upper]);
   const [domainLower, setDomainLower] = useState([domainDefaults.lower]);
+  const [colors, setColors] = useState<ColorPair[]>([]);
+
+  useEffect(() => {
+    setColors(
+      data.map((el) => {
+        return {
+          regressionLine: {
+            key: el.regressionLine.name,
+            colorCode: el.regressionLine.color,
+          },
+          dataPoints: {
+            key: el.regressionLine.name,
+            colorCode: el.regressionLine.color,
+          },
+        };
+      }),
+    );
+  }, [data]);
 
   return (
     <Collapsible
@@ -85,7 +118,23 @@ export function InteractiveGraph({
               value={domainLower}
             />
           </div>
-          <Label htmlFor="picture">Picture</Label>
+          {colors.map(({ regressionLine, dataPoints }, index) => (
+            <div className="flex" key={index}>
+              <ColorPicker
+                colorCode={regressionLine.colorCode}
+                dataKey={regressionLine.key}
+                onValueChanged={(e) => {
+                  const newArray = [...colors];
+                  newArray[index]!.regressionLine.colorCode = e.target.value;
+                  setColors(newArray);
+                }}
+              />
+              {/* <ColorPicker
+                colorCode={dataPoints.colorCode}
+                key={dataPoints.key}
+              /> */}
+            </div>
+          ))}
         </CollapsibleContent>
       </div>
 
