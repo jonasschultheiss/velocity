@@ -1,12 +1,12 @@
 'use client';
 
-import type { ColumnDef } from '@tanstack/react-table';
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import type { ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Table,
   TableBody,
@@ -15,16 +15,21 @@ import {
   TableHeader,
   TableRow,
 } from '../ui/table';
+import type { SwimmerColumnType } from './columns';
+import { generateColumns } from './columns';
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps {
+  data: SwimmerColumnType[];
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>): ReactNode {
+export function DataTable({ data }: DataTableProps): ReactNode {
+  const router = useRouter();
+  function handleRouteChange(path: string): void {
+    router.push(path);
+  }
+
+  const columns = generateColumns(handleRouteChange);
+
   const table = useReactTable({
     data,
     columns,
