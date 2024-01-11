@@ -27,12 +27,12 @@ export function SocialCard({
   }
 
   return (
-    <Card className="col-span-3">
+    <Card className="col-span-3 min-w-48">
       <CardHeader>
         <CardTitle>Socials</CardTitle>
         <CardDescription>Follow the swimmer on social media</CardDescription>
       </CardHeader>
-      <CardContent className="flex items-center gap-x-4">
+      <CardContent className="flex items-center gap-x-4 md:flex-col md:gap-x-0 md:gap-y-4">
         {Object.keys(socials).map((key) => {
           const value = socials[key as keyof SocialList];
           if (!value) {

@@ -56,7 +56,12 @@ export function ComboBox({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[220px] p-0">
-        <Command>
+        <Command
+          filter={(value, search) => {
+            if (value.includes(search.toLowerCase())) return 1;
+            return 0;
+          }}
+        >
           <CommandInput placeholder={`Search ${optionType}...`} />
           <CommandEmpty>No {optionType} found.</CommandEmpty>
           <CommandList>
@@ -74,7 +79,7 @@ export function ComboBox({
                     setOpen(false);
                   }
                 }}
-                value={option.value}
+                value={option.label}
               >
                 <Check
                   className={cn(

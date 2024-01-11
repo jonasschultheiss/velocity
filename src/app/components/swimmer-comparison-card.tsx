@@ -64,6 +64,7 @@ export function SwimmerComparisonCard({
               alt="Image of the swimmer"
               className="object-cover object-top rounded-lg"
               fill
+              priority
               src="/swimmers/cameron_mcevoy.jpeg"
             />
           </AspectRatio>

@@ -109,22 +109,24 @@ export function InteractiveGraph({
           <span className="sr-only">Toggle</span>
         </Button>
       </CollapsibleTrigger>
-      <ScrollArea className="p-2 pt-0 ">
-        <ScrollBar orientation="horizontal" />
-        <AspectRatio ratio={16 / 9}>
-          <ParentSize className="h-full">
-            {({ height }) => (
-              <Graph
-                data={data}
-                domainLower={getDomainValue('lower', domainLower) / 100}
-                domainUpper={getDomainValue('upper', domainUpper) / 100}
-                height={height}
-                tooltipEnabled={tooltipEnabled}
-              />
-            )}
-          </ParentSize>
-        </AspectRatio>
-      </ScrollArea>
+      {data.length > 0 ? (
+        <ScrollArea className="p-2 pt-0 ">
+          <ScrollBar orientation="horizontal" />
+          <AspectRatio ratio={16 / 9}>
+            <ParentSize className="h-full">
+              {({ height }) => (
+                <Graph
+                  data={data}
+                  domainLower={getDomainValue('lower', domainLower) / 100}
+                  domainUpper={getDomainValue('upper', domainUpper) / 100}
+                  height={height}
+                  tooltipEnabled={tooltipEnabled}
+                />
+              )}
+            </ParentSize>
+          </AspectRatio>
+        </ScrollArea>
+      ) : null}
     </Collapsible>
   );
 }

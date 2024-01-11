@@ -28,7 +28,7 @@ export default function RootLayout({
           enableSystem
         >
           <Navigation />
-          <main className="px-6">{children}</main>
+          <main className="px-6 md:px-32 md:py-16">{children}</main>
           <Analytics />
           <SpeedInsights />
         </ThemeProvider>
