@@ -79,27 +79,26 @@ export function Graph({
         orientation="left"
         tickLabelProps={() => ({ dx: -10 })}
       />
-      {data.map(({ regressionLine, dataPoints }) => (
-        <>
-          <AnimatedLineSeries
-            data={regressionLine.data}
-            dataKey={regressionLine.name}
-            enableEvents={false}
-            key={regressionLine.name}
-            stroke={regressionLine.color}
-            {...accessorsNullable}
-          />
-          <GlyphSeries
-            colorAccessor={() => dataPoints.color}
-            data={dataPoints.data}
-            dataKey={dataPoints.name}
-            enableEvents
-            key={dataPoints.name}
-            {...accessorsNullable}
-          />
-        </>
+      {data.map(({ regressionLine }) => (
+        <AnimatedLineSeries
+          data={regressionLine.data}
+          dataKey={regressionLine.name}
+          enableEvents={false}
+          key={regressionLine.name}
+          stroke={regressionLine.color}
+          {...accessorsNullable}
+        />
       ))}
-
+      {data.map(({ dataPoints }) => (
+        <GlyphSeries
+          colorAccessor={() => dataPoints.color}
+          data={dataPoints.data}
+          dataKey={dataPoints.name}
+          enableEvents
+          key={dataPoints.name}
+          {...accessorsNullable}
+        />
+      ))}
       {tooltipEnabled ? (
         <Tooltip
           glyphStyle={{
