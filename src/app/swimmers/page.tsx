@@ -9,8 +9,8 @@ export default function Page(): ReactElement {
       <Typography component="h1" variant="h1">
         All swimmers
       </Typography>
-      <Typography component="p" variant="p">
-        This data table
+      <Typography className="md:mb-8" component="p" variant="p">
+        This data displays all available swimmers you can choose from
       </Typography>
       <Suspense
         fallback={

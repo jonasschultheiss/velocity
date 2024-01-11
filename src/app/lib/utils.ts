@@ -49,68 +49,69 @@ export function urlIdentifierToName(param: string): SwimmerName {
   return { surname, lastname };
 }
 
-export function getInitialSlots(): Slots {
-  return {
-    used: [
-      {
-        preamble: 'b-',
-        colors: {
-          dataPoints: '#eab308',
-          regressionLine: '#22c55e',
-        },
+export function getInitialSlots(sizeOfUsed = 2): Slots {
+  const all = [
+    {
+      preamble: 'h-',
+      colors: {
+        dataPoints: '#ec4899',
+        regressionLine: '#ec4899',
       },
-      {
-        preamble: 'a-',
-        colors: {
-          dataPoints: '#3b82f6',
-          regressionLine: '#ef4444',
-        },
+    },
+    {
+      preamble: 'g-',
+      colors: {
+        dataPoints: '#06b6d4',
+        regressionLine: '#06b6d4',
       },
-    ],
-    free: [
-      {
-        preamble: 'h-',
-        colors: {
-          dataPoints: '#a855f7',
-          regressionLine: '#22c55e',
-        },
-      },
-      {
-        preamble: 'g-',
-        colors: {
-          dataPoints: '#06b6d4',
-          regressionLine: '#a855f7',
-        },
-      },
+    },
 
-      {
-        preamble: 'f-',
-        colors: {
-          dataPoints: '#eab308',
-          regressionLine: '#ec4899',
-        },
+    {
+      preamble: 'f-',
+      colors: {
+        dataPoints: '#14b8a6',
+        regressionLine: '#14b8a6',
       },
-      {
-        preamble: 'e-',
-        colors: {
-          dataPoints: '#a855f7',
-          regressionLine: '#06b6d4',
-        },
+    },
+    {
+      preamble: 'e-',
+      colors: {
+        dataPoints: '#a855f7',
+        regressionLine: '#a855f7',
       },
-      {
-        preamble: 'd-',
-        colors: {
-          dataPoints: '#ec4899',
-          regressionLine: '#eab308',
-        },
+    },
+    {
+      preamble: 'd-',
+      colors: {
+        dataPoints: '#eab308',
+        regressionLine: '#eab308',
       },
-      {
-        preamble: 'c-',
-        colors: {
-          dataPoints: '#ef4444',
-          regressionLine: '#3b82f6',
-        },
+    },
+    {
+      preamble: 'c-',
+      colors: {
+        dataPoints: '#22c55e',
+        regressionLine: '#22c55e',
       },
-    ],
+    },
+    {
+      preamble: 'b-',
+      colors: {
+        dataPoints: '#ef4444',
+        regressionLine: '#ef4444',
+      },
+    },
+    {
+      preamble: 'a-',
+      colors: {
+        dataPoints: '#3b82f6',
+        regressionLine: '#3b82f6',
+      },
+    },
+  ];
+
+  return {
+    used: [...all.slice(-Math.abs(sizeOfUsed))],
+    free: [...all],
   };
 }

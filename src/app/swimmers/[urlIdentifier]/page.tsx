@@ -42,49 +42,53 @@ export default async function Page({
 
   return (
     <>
-      <section className="w-full mb-4 text-balance">
-        <Typography component="h2" variant="lead">
-          {club}
-        </Typography>
-        <Typography component="h1" variant="h1">
-          {surname} {lastname}
-        </Typography>
-      </section>
-
-      {urlIdentifier === 'cameron_mcevoy' && (
+      <div className="mb-8">
+        <section className="w-full mb-4 text-balance">
+          <Typography component="h2" variant="lead">
+            {club}
+          </Typography>
+          <Typography component="h1" variant="h1">
+            {surname} {lastname}
+          </Typography>
+        </section>
         <div className="w-full max-w-md">
           <AspectRatio ratio={16 / 9}>
             <Image
               alt={`Image of the swimmer ${surname} ${lastname}`}
               className="object-cover object-top rounded-lg"
               fill
-              src={`/swimmers/${urlIdentifier}.jpeg`}
+              priority
+              src="/swimmers/cameron_mcevoy.jpeg"
             />
           </AspectRatio>
         </div>
-      )}
-      <div className="grid grid-cols-3 gap-4">
-        <InfoCard unit="cm" value={height?.toString()} />
-        <InfoCard unit="kg" value={weight?.toString()} />
-        <InfoCard unit="ans" value={birthdate?.toISOString()} />
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Biography</CardTitle>
-            <CardDescription>
-              A concise encapsulation of the swimmer&apos;s remarkable journey
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Typography
-              className="w-full text-pretty"
-              component="p"
-              variant="p"
-            >
-              {bio}
-            </Typography>
-          </CardContent>
-        </Card>
-        <SocialCard socials={socials} />
+      </div>
+      <div className="flex flex-col md:flex-row md:gap-x-4">
+        <div className="grid grid-cols-3 gap-4 md:flex md:flex-col">
+          <InfoCard unit="kg" value={weight?.toString()} />
+          <InfoCard unit="cm" value={height?.toString()} />
+          <InfoCard unit="ans" value={birthdate?.toISOString()} />
+          <SocialCard socials={socials} />
+        </div>
+        <div className="col-span-3">
+          <Card>
+            <CardHeader>
+              <CardTitle>Biography</CardTitle>
+              <CardDescription>
+                A concise encapsulation of the swimmer&apos;s remarkable journey
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Typography
+                className="w-full text-pretty"
+                component="p"
+                variant="p"
+              >
+                {bio}
+              </Typography>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </>
   );

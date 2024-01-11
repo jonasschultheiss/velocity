@@ -13,6 +13,7 @@ import type { Slots } from '@/lib/utils';
 import { getInitialSlots } from '@/lib/utils';
 import { useDynamicSwimmers } from '@/lib/use-dynamic-swimmers';
 import { Button } from '@/components/ui/button';
+import { ScrollArea, ScrollBar } from './ui/scroll-area';
 
 type SwimmerWithExtras = Swimmer & { fullName: string; urlIdentifier: string };
 
@@ -23,9 +24,19 @@ export interface DynamicComparisonProperties {
 export function DynamicComparison({
   allSwimmers,
 }: DynamicComparisonProperties): ReactElement {
-  const [slots, setSlots] = useState<Slots>(getInitialSlots());
-
   const searchParams = useSearchParams();
+
+  let initialAmountOfSlots = 0;
+  for (const key of searchParams.keys()) {
+    if (key.includes('swimmer')) {
+      initialAmountOfSlots++;
+    }
+  }
+
+  const [slots, setSlots] = useState<Slots>(
+    getInitialSlots(initialAmountOfSlots),
+  );
+
   const { comparedSwimmers, datasets } = useDynamicSwimmers(
     searchParams,
     slots.used,
@@ -51,28 +62,40 @@ export function DynamicComparison({
 
   return (
     <>
-      {comparedSwimmers.map(({ preamble, possibleOptions, swimmer }, index) => (
-        <div key={index}>
-          <SwimmerComparisonCard
-            possibleOptions={possibleOptions}
-            preamble={preamble}
-            selectedSwimmer={swimmer}
-            swimmers={allSwimmers}
-          />
-          {comparedSwimmers.length !== index + 1 ? (
-            <Typography
-              className="block my-8 text-center"
-              component="p"
-              variant="h1"
-            >
-              VS
-            </Typography>
-          ) : null}
+      <ScrollArea className="display:hidden">
+        <ScrollBar orientation="horizontal" />
+        <div className="min-w-full w-max md:flex display:hidden">
+          {comparedSwimmers.map(
+            ({ preamble, possibleOptions, swimmer }, index) => (
+              <div
+                className="flex flex-col items-center md:flex-row gap-y-8 md:gap-y-0 md:gap-x-8"
+                key={index}
+              >
+                <SwimmerComparisonCard
+                  key={`${index}-card`}
+                  possibleOptions={possibleOptions}
+                  preamble={preamble}
+                  selectedSwimmer={swimmer}
+                  swimmers={allSwimmers}
+                />
+                {comparedSwimmers.length !== index + 1 ? (
+                  <Typography
+                    className="block mb-8 text-center md:mb-0 md:mr-8"
+                    component="p"
+                    key={`${index}-vs`}
+                    variant="h1"
+                  >
+                    VS
+                  </Typography>
+                ) : null}
+              </div>
+            ),
+          )}
         </div>
-      ))}
+      </ScrollArea>
 
       <Button
-        className="my-4"
+        className="my-4 md:my-8"
         disabled={!canBeAdded()}
         onClick={() => {
           addSlot();
