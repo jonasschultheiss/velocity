@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { Badge } from './ui/badge';
 
 interface Option {
   value: string;
@@ -42,7 +43,7 @@ export function ComboBox({
       <PopoverTrigger asChild>
         <Button
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-[220px] justify-between"
           role="combobox"
           variant="outline"
         >
@@ -54,7 +55,7 @@ export function ComboBox({
           <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[220px] p-0">
         <Command>
           <CommandInput placeholder={`Search ${optionType}...`} />
           <CommandEmpty>No {optionType} found.</CommandEmpty>
@@ -63,7 +64,7 @@ export function ComboBox({
               <CommandItem
                 className={cn(
                   option.value.includes('remove') &&
-                    'aria-selected:bg-destructive aria-selected:text-destructive-foreground',
+                    'aria-selected:bg-destructive aria-selected:text-destructive-foreground text-destructive',
                 )}
                 disabled={option.disabled}
                 key={option.value}
@@ -82,6 +83,11 @@ export function ComboBox({
                   )}
                 />
                 {option.label}
+                {option.disabled ? (
+                  <Badge className="ml-2" variant="destructive">
+                    N/A
+                  </Badge>
+                ) : null}
               </CommandItem>
             ))}
           </CommandList>
