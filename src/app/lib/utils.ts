@@ -49,6 +49,13 @@ export function urlIdentifierToName(param: string): SwimmerName {
   return { surname, lastname };
 }
 
+export function urlNameToIdentifier({
+  surname,
+  lastname,
+}: SwimmerName): string {
+  return `${surname.toLowerCase()}${NAME_SPLIT}${lastname.toLowerCase()}`;
+}
+
 export function getInitialSlots(sizeOfUsed = 2): Slots {
   const all = [
     {
@@ -110,8 +117,10 @@ export function getInitialSlots(sizeOfUsed = 2): Slots {
     },
   ];
 
-  return {
-    used: [...all.slice(-Math.abs(sizeOfUsed))],
+  const returnValue = {
+    used: [...all.splice(-Math.abs(sizeOfUsed === 0 ? 2 : sizeOfUsed))],
     free: [...all],
   };
+
+  return returnValue;
 }

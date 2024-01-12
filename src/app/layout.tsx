@@ -7,6 +7,7 @@ import type { ReactElement } from 'react';
 import { Navigation } from './components/navigation/navigation';
 import { ThemeProvider } from './components/theme-provider';
 import './globals.css';
+import { Footer } from './components/footer';
 
 export const metadata: Metadata = {
   title: 'Velocity',
@@ -29,6 +30,7 @@ export default function RootLayout({
         >
           <Navigation />
           <main className="px-6 md:px-32 md:py-16">{children}</main>
+          <Footer />
           <Analytics />
           <SpeedInsights />
         </ThemeProvider>
