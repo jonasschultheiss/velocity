@@ -85,8 +85,8 @@ export function generateColumns(
     {
       header: 'Weight',
       accessorKey: 'weight',
-      accessorFn: ({ height }) => {
-        return `${height} kg`;
+      accessorFn: ({ weight }) => {
+        return weight ? `${weight} kg` : undefined;
       },
     },
     {
@@ -100,11 +100,11 @@ export function generateColumns(
       header: 'Birthdate',
       accessorKey: 'birthdate',
       accessorFn: ({ birthdate }) => {
-        if (birthdate?.getDate()) {
+        if (birthdate) {
           return `${birthdate.getDate()}.${birthdate.getMonth()}.${birthdate.getFullYear()}`;
         }
 
-        return <div>N/A</div>;
+        return '';
       },
     },
   ];

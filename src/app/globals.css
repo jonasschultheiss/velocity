@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+body > div:first-child,
+div#__next,
+div#__next > div {
+  height: 100%;
+}
+
 .h1 {
   @apply text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl;
 }
