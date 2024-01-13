@@ -2,7 +2,7 @@
 
 import { SmileIcon } from 'lucide-react';
 import type { ReactElement } from 'react';
-import { Typography } from './components/typography';
+import { Typography } from '@/components/typography';
 
 export default function Page(): ReactElement {
   return (

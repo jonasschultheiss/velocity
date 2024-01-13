@@ -1,13 +1,20 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion -- i know that the array has items*/
+/* eslint-disable @typescript-eslint/no-unnecessary-condition -- weird case*/
 'use client';
 
+import type { SortingState, VisibilityState } from '@tanstack/react-table';
 import {
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { nameToUrlIdentifier, preambleList } from '@/lib/utils';
 import {
   Table,
   TableBody,
@@ -16,7 +23,14 @@ import {
   TableHeader,
   TableRow,
 } from '../ui/table';
-import { Button } from '../ui/button';
+import { Button, buttonVariants } from '../ui/button';
+import { Input } from '../ui/input';
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
 import type { SwimmerColumnType } from './columns';
 import { generateColumns } from './columns';
 
@@ -25,6 +39,11 @@ interface DataTableProps {
 }
 
 export function DataTable({ data }: DataTableProps): ReactNode {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState<string>('');
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+
   const router = useRouter();
   function handleRouteChange(path: string): void {
     router.push(path);
@@ -37,10 +56,89 @@ export function DataTable({ data }: DataTableProps): ReactNode {
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      columnVisibility,
+      sorting,
+      rowSelection,
+      globalFilter,
+    },
+    getFilteredRowModel: getFilteredRowModel(),
   });
+
+  const amountOfSelected = table.getFilteredSelectedRowModel().rows.length;
 
   return (
     <div>
+      <div className="flex flex-wrap items-start justify-start gap-2 pt-8 pb-4 md:gap-4">
+        <Input
+          className="max-w-sm"
+          onChange={(event) => {
+            setGlobalFilter(event.target.value);
+          }}
+          placeholder="Filter swimmers..."
+          value={globalFilter.toString() ?? ''}
+        />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">Columns</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    checked={column.getIsVisible()}
+                    className="capitalize"
+                    key={column.id}
+                    onCheckedChange={(value) => {
+                      column.toggleVisibility(Boolean(value));
+                    }}
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+        {sorting.length > 0 ? (
+          <Button
+            onClick={() => {
+              setSorting([]);
+            }}
+            variant="ghost"
+          >
+            Reset sorting
+          </Button>
+        ) : null}
+        {amountOfSelected >= 2 && amountOfSelected <= 8 ? (
+          <Link
+            className={buttonVariants({ variant: 'outline' })}
+            href={`/comparison?${table
+              .getFilteredSelectedRowModel()
+              .rows.map(
+                ({ original }, index) =>
+                  `${preambleList[index]!}swimmer=${nameToUrlIdentifier(
+                    original,
+                  )}${index + 1 !== amountOfSelected ? '&' : ''}`,
+              )
+              .join('')}`}
+          >
+            Compare selected swimmers
+          </Link>
+        ) : null}
+        {amountOfSelected > 0 ? (
+          <div className="my-auto text-sm justify-self-end text-muted-foreground">
+            {amountOfSelected} of {table.getFilteredRowModel().rows.length}{' '}
+            swimmer(s) selected.
+          </div>
+        ) : null}
+      </div>
       <div className="border rounded-md">
         <Table>
           <TableHeader>

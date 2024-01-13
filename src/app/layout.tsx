@@ -21,15 +21,17 @@ export default function RootLayout({
 }): ReactElement {
   return (
     <html className={`${GeistSans.variable} ${GeistMono.variable}`} lang="en">
-      <body>
+      <body className="flex flex-col justify-between min-h-screen">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           disableTransitionOnChange
           enableSystem
         >
-          <Navigation />
-          <main className="px-6 md:px-32 md:py-16">{children}</main>
+          <div>
+            <Navigation />
+            <main className="px-6 md:px-32 md:py-16">{children}</main>
+          </div>
           <Footer />
           <Analytics />
           <SpeedInsights />
