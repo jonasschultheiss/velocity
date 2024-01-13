@@ -16,7 +16,7 @@ import { NavigationItems } from './navigation-items';
 const navigation: NavigationRoute[] = [
   { name: 'Swimmers', href: '/swimmers' },
   { name: 'Comparison', href: '/comparison' },
-  { name: 'About', href: '#' },
+  { name: 'About', href: '/about' },
 ];
 
 export function Navigation(): ReactNode {

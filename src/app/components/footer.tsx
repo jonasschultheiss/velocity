@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 
 export function Footer(): ReactElement {
   return (
-    <footer className="relative bottom-0 py-6 md:px-8">
+    <footer className="relative bottom-0 px-2 py-6 text-left md:px-8">
       <div className="flex flex-col items-start justify-start">
         <p className="text-sm leading-loose text-center text-balance text-muted-foreground md:text-left">
           Built by{' '}
@@ -37,7 +37,7 @@ export function Footer(): ReactElement {
           and{' '}
           <a
             className="font-medium underline underline-offset-4"
-            href="https://github.com/HorusXIV/IDPA-Schwimmen-2023"
+            href="https://github.com/jonasschultheiss/velocity"
             rel="noreferrer"
             target="_blank"
           >
