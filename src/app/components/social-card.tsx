@@ -44,6 +44,8 @@ export function SocialCard({
               className="flex items-center justify-center w-full py-2 border rounded-sm"
               href={value}
               key={key}
+              rel="noopener"
+              target="_blank"
             >
               <Image
                 alt={`Branding logo of social media ${key}`}

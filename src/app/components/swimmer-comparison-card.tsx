@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import type { Swimmer, SwimmerWithExtras } from 'src/db/schema';
 import type { SwimmerPossibilities } from '@/lib/fetch-swimmer-options';
+import { nameToUrlIdentifier } from '@/lib/utils';
 import {
   Card,
   CardContent,
@@ -65,7 +66,7 @@ export function SwimmerComparisonCard({
               className="object-cover object-top rounded-lg"
               fill
               priority
-              src="/swimmers/cameron_mcevoy.jpeg"
+              src={`/swimmers/${nameToUrlIdentifier(selectedSwimmer)}.jpeg`}
             />
           </AspectRatio>
           <CardTitle>
