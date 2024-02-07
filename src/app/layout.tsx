@@ -28,10 +28,8 @@ export default function RootLayout({
           disableTransitionOnChange
           enableSystem
         >
-          <div>
-            <Navigation />
-            <main className="px-6 md:px-32 md:py-16">{children}</main>
-          </div>
+          <Navigation />
+          <main className="px-6 md:px-32 md:py-16">{children}</main>
           <Footer />
           <Analytics />
           <SpeedInsights />
