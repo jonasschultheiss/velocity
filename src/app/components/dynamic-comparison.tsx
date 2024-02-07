@@ -2,7 +2,7 @@
 'use client';
 
 /* eslint-disable react/no-array-index-key -- scusa*/
-import { useState, type ReactElement } from 'react';
+import { useState, type ReactElement, useRef, useEffect } from 'react';
 import { UserPlusIcon } from '@heroicons/react/24/outline';
 import { useSearchParams } from 'next/navigation';
 import { Typography } from '@/components/typography';
@@ -26,6 +26,9 @@ export function DynamicComparison({
 }: DynamicComparisonProperties): ReactElement {
   const searchParams = useSearchParams();
 
+  const scrollToBottom = searchParams.get('bottom');
+  const div = useRef<HTMLDivElement | null>(null);
+
   let initialAmountOfSlots = 0;
   for (const key of searchParams.keys()) {
     if (key.includes('swimmer')) {
@@ -37,10 +40,16 @@ export function DynamicComparison({
     getInitialSlots(initialAmountOfSlots),
   );
 
-  const { comparedSwimmers, datasets } = useDynamicSwimmers(
-    searchParams,
-    slots.used,
-  );
+  const {
+    dynamicList: { comparedSwimmers, datasets },
+    loading,
+  } = useDynamicSwimmers(searchParams, slots.used);
+
+  useEffect(() => {
+    if (scrollToBottom && Boolean(scrollToBottom) && !loading) {
+      div.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  }, [scrollToBottom, loading]);
 
   function canBeAdded(): boolean {
     return slots.used.length >= 2 && slots.used.length <= 7;
@@ -61,7 +70,7 @@ export function DynamicComparison({
   }
 
   return (
-    <>
+    <div ref={div}>
       <ScrollArea className="display:hidden">
         <ScrollBar orientation="horizontal" />
         <div className="min-w-full w-max md:flex display:hidden">
@@ -105,6 +114,6 @@ export function DynamicComparison({
         <UserPlusIcon className="w-4 h-4 mr-2" /> Add another swimmer
       </Button>
       <InteractiveGraph data={datasets} />
-    </>
+    </div>
   );
 }

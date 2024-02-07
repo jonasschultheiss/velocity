@@ -36,7 +36,8 @@ export interface SwimmerGraphDetails {
 export function useDynamicSwimmers(
   searchParams: ReadonlyURLSearchParams,
   swimmerGraphDetails: SwimmerGraphDetails[],
-): DynamicSwimmersList {
+): { loading: boolean; dynamicList: DynamicSwimmersList } {
+  const [loading, setLoading] = useState<boolean>(false);
   const [dynamicList, setDynamicList] = useState<DynamicSwimmersList>({
     datasets: [],
     comparedSwimmers: [],
@@ -45,6 +46,7 @@ export function useDynamicSwimmers(
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- snake biting own tail with this error
     const asyncHandler = async () => {
+      setLoading(true);
       const datasets: SwimmerDataSet[] = [];
       const comparedSwimmers: DynamicSwimmerData[] = [];
       const gg = await Promise.all(
@@ -110,11 +112,12 @@ export function useDynamicSwimmers(
         }
       });
 
+      setLoading(false);
       setDynamicList({ datasets, comparedSwimmers });
     };
 
     void asyncHandler();
   }, [searchParams, swimmerGraphDetails]);
 
-  return dynamicList;
+  return { dynamicList, loading };
 }
