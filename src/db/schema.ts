@@ -28,6 +28,7 @@ export const SwimmerTable = pgTable(
     height: smallint('height'),
     birthdate: timestamp('birthdate', { precision: 6, withTimezone: false }),
     bio: varchar('bio', { length: defaultVarcharLength * 4 }),
+    image: varchar('image', { length: defaultVarcharLength * 4 }),
     instagram: varchar('instagram', { length: defaultVarcharLength }),
     tiktok: varchar('tiktok', { length: defaultVarcharLength }),
     youtube: varchar('youtube', { length: defaultVarcharLength }),
@@ -49,6 +50,7 @@ export interface SwimmerWithExtras extends Swimmer {
   height: number | null;
   birthdate: Date | null;
   bio: string | null;
+  image: string | null;
   instagram: string | null;
   tiktok: string | null;
   youtube: string | null;

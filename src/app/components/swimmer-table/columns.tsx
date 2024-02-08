@@ -154,7 +154,7 @@ export function generateColumns(
       enableGlobalFilter: true,
       accessorFn: ({ birthdate }) => {
         if (birthdate) {
-          return birthdate.toLocaleDateString('de-CH');
+          return `${birthdate.getFullYear()}.${birthdate.getMonth()}.${birthdate.getDate()}`;
         }
 
         return '';

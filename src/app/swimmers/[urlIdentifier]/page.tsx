@@ -37,6 +37,7 @@ export default async function Page({
     height,
     birthdate,
     bio,
+    image,
     ...socials
   } = result;
 
@@ -58,20 +59,20 @@ export default async function Page({
               className="object-cover object-top rounded-lg"
               fill
               priority
-              src="/swimmers/cameron_mcevoy.jpeg"
+              src={`/swimmers/${image || 'default.jpeg'}`}
             />
           </AspectRatio>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row md:gap-x-4">
+      <div className="flex flex-col md:flex-row md:gap-x-4 gap-y-4">
         <div className="grid grid-cols-3 gap-4 md:flex md:flex-col">
           <InfoCard unit="kg" value={weight?.toString()} />
           <InfoCard unit="cm" value={height?.toString()} />
           <InfoCard unit="ans" value={birthdate?.toISOString()} />
           <SocialCard socials={socials} />
         </div>
-        <div className="col-span-3">
-          <Card>
+        <div className="w-full col-span-3">
+          <Card className="h-full">
             <CardHeader>
               <CardTitle>Biography</CardTitle>
               <CardDescription>

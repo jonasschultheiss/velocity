@@ -65,7 +65,7 @@ export function SwimmerComparisonCard({
               className="object-cover object-top rounded-lg"
               fill
               priority
-              src="/swimmers/cameron_mcevoy.jpeg"
+              src={`/swimmers/${selectedSwimmer.image || 'default.jpeg'}`}
             />
           </AspectRatio>
           <CardTitle>

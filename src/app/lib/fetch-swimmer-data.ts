@@ -12,12 +12,14 @@ interface FetchResponse {
 }
 
 export async function fetchSwimmerData(
-  { technique, track }: DefinedSearchParams,
+  { technique, track, absolute }: DefinedSearchParams,
   surname: string,
   lastname: string,
 ): Promise<SwimmerResponse> {
   const response = await fetch(
-    `https://www.horus-tech.com:9387/requestData?firstname=${surname}&lastname=${lastname}&track_length=${track}&technique=${technique}`,
+    `https://www.horus-tech.com:9387/requestData?firstname=${surname}&lastname=${lastname}&track_length=${track}&technique=${technique}${
+      absolute === 'true' ? '&absolute=true' : ''
+    }`,
     {
       next: { revalidate: 86400 },
     },
