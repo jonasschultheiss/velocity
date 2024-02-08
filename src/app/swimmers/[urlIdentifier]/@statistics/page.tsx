@@ -17,7 +17,7 @@ export interface SwimmerStatisticsPageProperties {
 
 export default async function Page({
   params: { urlIdentifier },
-  searchParams: { technique, track },
+  searchParams: { technique, track, absolute },
 }: SwimmerStatisticsPageProperties): Promise<ReactElement> {
   const fullName = urlIdentifierToName(urlIdentifier);
   const possibleOptions = await fetchPossibleOptions(fullName);
@@ -25,7 +25,7 @@ export default async function Page({
   const datasets: SwimmerDataSet[] = [];
   if (possibleOptions[`${technique}-${track}` as keyof SwimmerPossibilities]) {
     const swimmerResponse = await fetchSwimmerData(
-      { technique, track },
+      { technique, track, absolute },
       fullName.surname,
       fullName.lastname,
     );

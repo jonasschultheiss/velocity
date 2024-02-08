@@ -82,6 +82,7 @@ export function useDynamicSwimmers(
                   technique:
                     searchParams.get(`${preamble}technique`) || undefined,
                   track: searchParams.get(`${preamble}track`) || undefined,
+                  absolute: searchParams.get('absolute'),
                 },
                 swimmer.surname,
                 swimmer.lastname,

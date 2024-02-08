@@ -4,6 +4,7 @@ import ParentSize from '@visx/responsive/lib/components/ParentSize';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { ReactElement } from 'react';
 import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { domainDefaults, getDomainValue } from '@/lib/utils';
 import { Typography } from '../typography';
 import { AspectRatio } from '../ui/aspect-ratio';
@@ -32,6 +33,18 @@ export function InteractiveGraph({
   const [isOpen, setIsOpen] = useState(false);
   const [domainUpper, setDomainUpper] = useState([domainDefaults.upper]);
   const [domainLower, setDomainLower] = useState([domainDefaults.lower]);
+  const params = new URLSearchParams(useSearchParams());
+  const [absolute, setAbsolute] = useState(
+    Boolean(params.get('absolute') === 'true'),
+  );
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  function handleAbsoluteChanged(checked: boolean): void {
+    setAbsolute(!absolute);
+    params.set('absolute', String(checked));
+    replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }
 
   return (
     <Collapsible
@@ -41,6 +54,16 @@ export function InteractiveGraph({
     >
       <div className="flex flex-col space-y-2">
         <CollapsibleContent className="flex flex-col gap-y-2">
+          <div className="flex items-center space-x-2">
+            <Switch
+              checked={absolute}
+              id="absolute"
+              onCheckedChange={(checked) => {
+                handleAbsoluteChanged(checked);
+              }}
+            />
+            <Label htmlFor="absolute">Use absolute values</Label>
+          </div>
           <div className="flex items-center space-x-2">
             <Switch
               checked={tooltipEnabled}
@@ -85,7 +108,6 @@ export function InteractiveGraph({
               value={domainLower}
             />
           </div>
-          <Label htmlFor="picture">Picture</Label>
         </CollapsibleContent>
       </div>
 
